@@ -4,6 +4,8 @@ on:
     branches: [main]
     paths:
       - 'experiments/12_compactness_cancellation_tax.py'
+      - 'experiments/13_impulse_packing_energy_ladder.py'
+      - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -30,9 +32,18 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/12_compactness_cancellation_tax.py | tee result-12-${{ matrix.bits }}.json
+      - name: Run impulse-packing energy ladder
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/13_impulse_packing_energy_ladder.py | tee result-13-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: frontier-results-${{ matrix.bits }}bit
-          path: result-12-${{ matrix.bits }}.json
+          path: |
+          result-12-${{ matrix.bits }}.json
+          result-13-${{ matrix.bits }}.json
           if-no-files-found: warn
