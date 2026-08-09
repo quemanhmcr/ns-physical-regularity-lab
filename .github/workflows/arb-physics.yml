@@ -53,6 +53,20 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/02_oseen_lineage_switch.py | tee result-02-${{ matrix.bits }}.json
+      - name: Run finite-filament strain-support test remotely
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/03_finite_filament_strain.py | tee result-03-${{ matrix.bits }}.json
+      - name: Run closed-ring symmetry test remotely
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/04_closed_ring_symmetry.py | tee result-04-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
