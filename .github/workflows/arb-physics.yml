@@ -81,6 +81,13 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/06_nonplanar_stretching.py | tee result-06-${{ matrix.bits }}.json
+      - name: Run geometric mode-collapse test remotely
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/07_geometric_mode_collapse.py | tee result-07-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
