@@ -102,6 +102,13 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/09_beltrami_geometry_tax.py | tee result-09-${{ matrix.bits }}.json
+      - name: Run hydrodynamic-impulse far-field universality test remotely
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/10_impulse_farfield_universality.py | tee result-10-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
