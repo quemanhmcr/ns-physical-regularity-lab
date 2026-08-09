@@ -88,6 +88,20 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/07_geometric_mode_collapse.py | tee result-07-${{ matrix.bits }}.json
+      - name: Run closed-ring far-donor collateral test remotely
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/08_closed_ring_far_donor.py | tee result-08-${{ matrix.bits }}.json
+      - name: Run exact Beltrami geometry-tax calibration remotely
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/09_beltrami_geometry_tax.py | tee result-09-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
