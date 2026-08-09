@@ -44,6 +44,6 @@ jobs:
         with:
           name: frontier-results-${{ matrix.bits }}bit
           path: |
-          result-12-${{ matrix.bits }}.json
-          result-13-${{ matrix.bits }}.json
+            result-12-${{ matrix.bits }}.json
+            result-13-${{ matrix.bits }}.json
           if-no-files-found: warn
