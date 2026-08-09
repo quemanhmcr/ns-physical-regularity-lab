@@ -33,9 +33,10 @@ def mp_ring_uz(R,G,z):
     f = lambda th: (G/(4*mp.pi)) * R*R / (R*R+z*z)**mp.mpf('1.5')
     return mp.quad(f,[0,2*mp.pi])
 
-def mp_ring_szz_fd(R,G,z):
-    h = mp.mpf('1e-20')*max(mp.mpf(1),abs(z),abs(R))
-    return (mp_ring_uz(R,G,z+h)-mp_ring_uz(R,G,z-h))/(2*h)
+def mp_ring_szz_direct(R,G,z):
+    # Differentiate the actual quadrature-valued velocity at arbitrary precision;
+    # avoid imposing a finite-difference observation scale.
+    return mp.diff(lambda zz: mp_ring_uz(R,G,zz), z)
 
 cross = []
 for R_s,G_s,q_s in [('1e-9','1e-6','0.5'),('1','1','0.5'),('1e6','1e3','2')]:
@@ -44,7 +45,7 @@ for R_s,G_s,q_s in [('1e-9','1e-6','0.5'),('1','1','0.5'),('1e6','1e3','2')]:
     uz_ex=Gm*Rm*Rm/(2*(Rm*Rm+zm*zm)**mp.mpf('1.5'))
     if abs((uz_num-uz_ex)/uz_ex) > mp.mpf('1e-45'):
         raise AssertionError('ring axis velocity quadrature mismatch')
-    s_num=mp_ring_szz_fd(Rm,Gm,zm)
+    s_num=mp_ring_szz_direct(Rm,Gm,zm)
     s_ex=-3*Gm*Rm*Rm*zm/(2*(Rm*Rm+zm*zm)**mp.mpf('2.5'))
     if abs((s_num-s_ex)/s_ex) > mp.mpf('1e-25'):
         raise AssertionError(('ring axis strain quadrature mismatch',R_s,G_s,q_s,s_num,s_ex))
