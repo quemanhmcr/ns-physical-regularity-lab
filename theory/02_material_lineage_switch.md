@@ -46,3 +46,24 @@ The emerging canonical dichotomy is therefore:
 - switch material lineage through viscous leakage -> Oseen `Gamma^2` toll.
 
 The next research question is whether this common currency survives when stretching and lineage switching occur simultaneously in genuinely three-dimensional, non-axisymmetric local geometry.
+
+
+## Localized charge: avoiding a global-bookkeeping loophole
+
+Charging the *entire* Oseen dissipation to one lineage switch would be too generous for a future general proof.  We therefore localize the expenditure to the annulus `[R/2,2R]` surrounding the material circle whose circulation is leaking.
+
+At time `t`, with `q_R = R^2/(4 nu t)`, the exact fraction of Oseen dissipation lying in a general annulus `[alpha R, beta R]` is
+
+`exp(-2 alpha^2 q_R) - exp(-2 beta^2 q_R)`.
+
+During a switch from `f1` to `f2`, `q_R` runs from `q1` down to `q2`.  Therefore the annular dissipation factor has the rigorous lower bound
+
+`m = exp(-2 alpha^2 q1) - exp(-2 beta^2 q2)`.
+
+For `alpha=1/2`, `beta=2`, and every fraction pair used in the remote stress-test, Arb certifies `m>0`.  Hence
+
+`C_annulus >= Gamma^2/(8*pi) * m * log(q1/q2) > 0`.
+
+This strengthens the canonical statement: the scale-independent `Gamma^2` expenditure is not merely a consequence of charging the whole flow.  A positive amount can be assigned to a fixed-factor spatial neighborhood of the material boundary through which circulation is actually leaking.
+
+This still does **not** solve the future disjointness/double-counting problem for many overlapping switches in a general 3D flow.  That must be handled separately by a spacetime packing or ancestry construction.

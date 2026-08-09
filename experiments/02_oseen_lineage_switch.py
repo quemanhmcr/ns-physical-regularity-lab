@@ -22,6 +22,9 @@ gamma_values = ["1e-18", "1e-9", "1", "1e9"]
 radius_values = ["1e-24", "1e-8", "1", "1e8", "1e24"]
 q_probe_values = ["0.01", "0.1", "1", "10", "100"]
 # Fraction of total circulation inside a fixed material circle, early -> later.
+annulus_inner = arb("0.5")
+annulus_outer = arb("2")
+
 fraction_pairs = [
     ("0.99", "0.90"),
     ("0.90", "0.50"),
@@ -121,6 +124,26 @@ for nu_s in nu_values:
                         f"cost-per-leaked-circulation scaling failed: nu={nu_s}, Gamma={gamma_s}, R={R_s}, f1={f1_s}, f2={f2_s}, ratio={cpl_ratio}"
                     )
 
+                # Localize the charge: during the same switch, only count
+                # dissipation in the physical annulus [R/2, 2R] surrounding
+                # the material boundary.  At any time its dissipation fraction is
+                #   exp(-2 alpha^2 q_R) - exp(-2 beta^2 q_R).
+                # For q_R in [q2,q1], a rigorous scale-free lower bound is
+                #   exp(-2 alpha^2 q1) - exp(-2 beta^2 q2).
+                local_factor_lb = (-2 * annulus_inner * annulus_inner * q1).exp() - (
+                    -2 * annulus_outer * annulus_outer * q2
+                ).exp()
+                if not (local_factor_lb > 0):
+                    raise AssertionError(
+                        f"localized annulus toll lower bound is not positive: f1={f1_s}, f2={f2_s}, lb={local_factor_lb}"
+                    )
+                local_cost_lb = gamma * gamma / (8 * pi) * local_factor_lb * (q1 / q2).log()
+                local_cost_normalized = local_cost_lb / (gamma * gamma)
+                if not (local_cost_normalized > 0):
+                    raise AssertionError(
+                        f"localized cost/Gamma^2 is not rigorously positive: nu={nu_s}, Gamma={gamma_s}, R={R_s}, f1={f1_s}, f2={f2_s}"
+                    )
+
                 pair_summaries.append({
                     "f1": f1_s,
                     "f2": f2_s,
@@ -129,6 +152,8 @@ for nu_s in nu_values:
                     "t2_over_t1": str(t2 / t1),
                     "cost_ratio": str(cost_ratio),
                     "cost_per_lost_ratio": str(cpl_ratio),
+                    "local_annulus_factor_lower_bound": str(local_factor_lb),
+                    "local_annulus_cost_over_Gamma2_lower_bound": str(local_cost_normalized),
                 })
 
             rows.append({
@@ -148,7 +173,8 @@ print(json.dumps({
     "status": "PASS",
     "interpretation": (
         "In the exact Lamb-Oseen NS diffusion solution, circulation can leave a fixed material core only through viscosity; "
-        "moving a fixed fraction of circulation across that material boundary carries a Gamma^2 toll independent of core radius and viscosity."
+        "moving a fixed fraction of circulation across that material boundary carries a Gamma^2 toll independent of core radius and viscosity, "
+        "and a strictly positive Gamma^2 lower bound remains even when dissipation is charged only to the local annulus [R/2,2R] around the crossing boundary."
     ),
     "rows": rows,
 }, indent=2))
