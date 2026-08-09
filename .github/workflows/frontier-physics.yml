@@ -7,9 +7,11 @@ on:
       - 'experiments/13_impulse_packing_energy_ladder.py'
       - 'experiments/14_smooth_vorticity_packing.py'
       - 'experiments/15_remote_strain_energy_composition.py'
+      - 'experiments/16_harmonic_strain_energy_floor.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
+      - 'theory/14_harmonic_vortical_split.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -57,6 +59,13 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/15_remote_strain_energy_composition.py | tee result-15-${{ matrix.bits }}.json
+      - name: Run harmonic-strain energy-floor test
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/16_harmonic_strain_energy_floor.py | tee result-16-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
