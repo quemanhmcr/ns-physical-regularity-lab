@@ -1,0 +1,38 @@
+name: Frontier physics check
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'experiments/12_compactness_cancellation_tax.py'
+      - 'theory/10_compactness_cancellation_tax.md'
+      - '.github/workflows/frontier-physics.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  frontier:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        bits: [160, 256, 512]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned precision stack
+        run: python -m pip install mpmath==1.4.1
+      - name: Run compactness-cancellation tax
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/12_compactness_cancellation_tax.py | tee result-12-${{ matrix.bits }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: frontier-results-${{ matrix.bits }}bit
+          path: result-12-${{ matrix.bits }}.json
+          if-no-files-found: warn
