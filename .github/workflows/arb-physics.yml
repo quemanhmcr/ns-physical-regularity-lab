@@ -67,6 +67,20 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/04_closed_ring_symmetry.py | tee result-04-${{ matrix.bits }}.json
+      - name: Run planar-loop geometric gate remotely
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/05_planar_loop_gate.py | tee result-05-${{ matrix.bits }}.json
+      - name: Run nonplanar stretching onset remotely
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/06_nonplanar_stretching.py | tee result-06-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
