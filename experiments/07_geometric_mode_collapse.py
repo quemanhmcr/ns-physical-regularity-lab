@@ -25,7 +25,7 @@ def sigma(theta,eps,m,core,N):
  uth=mul(1/(4*pi),su)
  return dot(xt,uth)/dot(xt,xt)
 
-def eff(eps,m,core,N,probes=12):
+def eff(eps,m,core,N,probes=17):
  ss=arb(0)
  for k in range(probes):
   th=2*pi*(arb(k)+arb('0.193'))/probes
