@@ -46,6 +46,13 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/01_burgers_vortex_toll.py | tee result-01-${{ matrix.bits }}.json
+      - name: Run material-lineage switching toll test remotely
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/02_oseen_lineage_switch.py | tee result-02-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
