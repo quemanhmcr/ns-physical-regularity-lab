@@ -5,7 +5,9 @@ on:
     paths:
       - 'experiments/12_compactness_cancellation_tax.py'
       - 'experiments/13_impulse_packing_energy_ladder.py'
+      - 'experiments/14_smooth_vorticity_packing.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
+      - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -39,6 +41,13 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/13_impulse_packing_energy_ladder.py | tee result-13-${{ matrix.bits }}.json
+      - name: Run smooth-vorticity packing and viscous-clock test
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/14_smooth_vorticity_packing.py | tee result-14-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -46,4 +55,5 @@ jobs:
           path: |
             result-12-${{ matrix.bits }}.json
             result-13-${{ matrix.bits }}.json
+            result-14-${{ matrix.bits }}.json
           if-no-files-found: warn
