@@ -22,9 +22,9 @@ if not (E(q_star)/Emax).contains(1):
 for q_s, sign in [('1e-6',1),('0.1',1),('0.49',1),('0.51',-1),('1',-1),('10',-1)]:
     q=arb(q_s)
     dsign = 1-4*q*q
-    if sign>0 and not dsign.is_positive():
+    if sign>0 and not (dsign > 0):
         raise AssertionError(('bad derivative sign',q_s,dsign))
-    if sign<0 and not dsign.is_negative():
+    if sign<0 and not (dsign < 0):
         raise AssertionError(('bad derivative sign',q_s,dsign))
 
 # Cross-check the analytic axis velocity and strain against direct ring quadrature.
