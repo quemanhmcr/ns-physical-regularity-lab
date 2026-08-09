@@ -20,10 +20,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Install arbitrary-precision stack
+      - name: Install pinned arbitrary-precision stack
         run: |
           python -m pip install --upgrade pip
-          python -m pip install python-flint mpmath
+          python -m pip install python-flint==0.9.0 mpmath==1.4.1
       - name: Record package versions
         run: |
           python - <<'PY'
@@ -33,10 +33,15 @@ jobs:
           print('mpmath', mpmath.__version__)
           PY
       - name: Run scale-cancellation sanity gate remotely
+        shell: bash
         env:
           ARB_PREC_BITS: ${{ matrix.bits }}
-        run: python experiments/00_precision_and_scaling.py | tee result-${{ matrix.bits }}.json
+        run: |
+          set -euo pipefail
+          python experiments/00_precision_and_scaling.py | tee result-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: arb-result-${{ matrix.bits }}bit
           path: result-${{ matrix.bits }}.json
+          if-no-files-found: warn
