@@ -109,6 +109,13 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/10_impulse_farfield_universality.py | tee result-10-${{ matrix.bits }}.json
+      - name: Run impulse-neutral multipole ladder remotely
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/11_impulse_neutral_multipole_ladder.py | tee result-11-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
