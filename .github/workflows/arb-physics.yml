@@ -38,10 +38,17 @@ jobs:
           ARB_PREC_BITS: ${{ matrix.bits }}
         run: |
           set -euo pipefail
-          python experiments/00_precision_and_scaling.py | tee result-${{ matrix.bits }}.json
+          python experiments/00_precision_and_scaling.py | tee result-00-${{ matrix.bits }}.json
+      - name: Run canonical strained-vortex toll test remotely
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/01_burgers_vortex_toll.py | tee result-01-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: arb-result-${{ matrix.bits }}bit
-          path: result-${{ matrix.bits }}.json
+          name: arb-results-${{ matrix.bits }}bit
+          path: result-*-${{ matrix.bits }}.json
           if-no-files-found: warn
