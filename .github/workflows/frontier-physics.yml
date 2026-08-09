@@ -10,12 +10,15 @@ on:
       - 'experiments/16_harmonic_strain_energy_floor.py'
       - 'experiments/17_hodge_strain_microscope.py'
       - 'experiments/18_arb_hodge_certificate.py'
+      - 'experiments/19_vorticity_to_strain_transaction.py'
+      - 'experiments/20_transaction_gain_cost.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
       - 'theory/14_harmonic_vortical_split.md'
       - 'theory/15_hodge_strain_microscope.md'
       - 'theory/16_hodge_transition_radius.md'
+      - 'theory/17_vorticity_to_strain_transaction.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -84,6 +87,20 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/18_arb_hodge_certificate.py | tee result-18-${{ matrix.bits }}.json
+      - name: Run vorticity-to-strain transaction microscope
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/19_vorticity_to_strain_transaction.py | tee result-19-${{ matrix.bits }}.json
+      - name: Run transaction gain-cost attack
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/20_transaction_gain_cost.py | tee result-20-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -96,4 +113,6 @@ jobs:
             result-16-${{ matrix.bits }}.json
             result-17-${{ matrix.bits }}.json
             result-18-${{ matrix.bits }}.json
+            result-19-${{ matrix.bits }}.json
+            result-20-${{ matrix.bits }}.json
           if-no-files-found: warn
