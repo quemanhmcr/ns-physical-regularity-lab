@@ -60,6 +60,9 @@ on:
       - 'experiments/66_fixed_scale_harmonic_reset_bound.py'
       - 'experiments/67_productive_pair_strain_frame.py'
       - 'experiments/68_pair_frame_strain_reconstruction.py'
+      - 'experiments/69_stationary_capacity_amplifier.py'
+      - 'experiments/70_stationary_amplifier_fixed_scale_ceiling.py'
+      - 'experiments/71_complete_pair_hodge_transaction_frame.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -85,6 +88,7 @@ on:
       - 'theory/33_hodge_screened_productive_shape_current.md'
       - 'theory/34_fixed_scale_reset_source_trilemma.md'
       - 'theory/35_productive_pair_strain_frame.md'
+      - 'theory/36_stationary_productive_amplifier.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -503,6 +507,27 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/68_pair_frame_strain_reconstruction.py | tee result-68-${{ matrix.bits }}.json
+      - name: Run stationary optimal productive amplifier
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/69_stationary_capacity_amplifier.py | tee result-69-${{ matrix.bits }}.json
+      - name: Run stationary amplifier fixed-scale ceiling
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/70_stationary_amplifier_fixed_scale_ceiling.py | tee result-70-${{ matrix.bits }}.json
+      - name: Run complete pair Hodge transaction frame
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/71_complete_pair_hodge_transaction_frame.py | tee result-71-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -565,4 +590,7 @@ jobs:
             result-66-${{ matrix.bits }}.json
             result-67-${{ matrix.bits }}.json
             result-68-${{ matrix.bits }}.json
+            result-69-${{ matrix.bits }}.json
+            result-70-${{ matrix.bits }}.json
+            result-71-${{ matrix.bits }}.json
           if-no-files-found: warn
