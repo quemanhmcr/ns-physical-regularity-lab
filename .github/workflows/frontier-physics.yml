@@ -84,6 +84,9 @@ on:
       - 'experiments/91_cumulative_source_reynolds_dichotomy.py'
       - 'experiments/92_localized_extremal_flux_reynolds_relation.py'
       - 'experiments/93_high_re_scalar_budget_escape.py'
+      - 'experiments/94_hodge_viscous_source_corridor.py'
+      - 'experiments/95_powerlaw_source_corridor.py'
+      - 'experiments/96_shrinking_source_volume_recruitment_escape.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -118,6 +121,7 @@ on:
       - 'theory/42_localized_productive_spectral_gap.md'
       - 'theory/43_source_relative_ancestry_flux_ledger.md'
       - 'theory/44_cumulative_source_reynolds_and_flux_aggregation.md'
+      - 'theory/45_hodge_viscous_source_corridor.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -704,6 +708,27 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/93_high_re_scalar_budget_escape.py | tee result-93-${{ matrix.bits }}.json
+      - name: Run Hodge-viscous source corridor
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/94_hodge_viscous_source_corridor.py | tee result-94-${{ matrix.bits }}.json
+      - name: Run power-law source corridor
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/95_powerlaw_source_corridor.py | tee result-95-${{ matrix.bits }}.json
+      - name: Attack material-volume toll in shrinking source
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/96_shrinking_source_volume_recruitment_escape.py | tee result-96-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -790,4 +815,7 @@ jobs:
             result-91-${{ matrix.bits }}.json
             result-92-${{ matrix.bits }}.json
             result-93-${{ matrix.bits }}.json
+            result-94-${{ matrix.bits }}.json
+            result-95-${{ matrix.bits }}.json
+            result-96-${{ matrix.bits }}.json
           if-no-files-found: warn
