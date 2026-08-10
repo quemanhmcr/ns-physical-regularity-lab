@@ -18,7 +18,7 @@ R_over_b_values=['2','3','10','1e2','1e4','1e8','1e16','1e30']
 collar_ratios=['1.1','2','10','1e3']
 thetas=['0.1','0.5','1']
 gammas=['1e-12','1','1e12']
-nus=['1e-18','1','1e18']
+nu_values=['1e-18','1','1e18']
 
 for Rob_s in R_over_b_values:
   Rob=arb(Rob_s)
@@ -32,7 +32,7 @@ for Rob_s in R_over_b_values:
       th=arb(th_s)
       for gs in gammas:
         G=arb(gs)
-        for nus in nus:
+        for nus in nu_values:
           nu=arb(nus)
           curvature_integral=2*pi/R
           tax=nu*G*curvature_integral
