@@ -40,6 +40,12 @@ on:
       - 'experiments/46_periodic_quadratic_bridge_reuse.py'
       - 'experiments/47_full_cycle_product_balance.py'
       - 'experiments/48_stroboscopic_renewal_memory.py'
+      - 'experiments/49_material_graph_memory_coboundary.py'
+      - 'experiments/50_hyperbolic_productive_triangle.py'
+      - 'experiments/51_memory_occupancy_moment.py'
+      - 'experiments/52_accelerated_recurrence_observer.py'
+      - 'experiments/53_reset_strain_action.py'
+      - 'experiments/54_rigid_rotation_productivity_gauge.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -58,6 +64,8 @@ on:
       - 'theory/26_normalized_cycle_survival.md'
       - 'theory/27_complete_pair_cycle_productivity.md'
       - 'theory/28_periodic_renewal_memory.md'
+      - 'theory/29_closed_network_memory.md'
+      - 'theory/30_recurrence_reset_action.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -336,6 +344,48 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/48_stroboscopic_renewal_memory.py | tee result-48-${{ matrix.bits }}.json
+      - name: Run material-graph memory coboundary attack
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/49_material_graph_memory_coboundary.py | tee result-49-${{ matrix.bits }}.json
+      - name: Run hyperbolic productive-triangle microscope
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/50_hyperbolic_productive_triangle.py | tee result-50-${{ matrix.bits }}.json
+      - name: Run material memory-occupancy moment microscope
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/51_memory_occupancy_moment.py | tee result-51-${{ matrix.bits }}.json
+      - name: Attack accelerated recurrence observer
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/52_accelerated_recurrence_observer.py | tee result-52-${{ matrix.bits }}.json
+      - name: Run reset strain-action microscope
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/53_reset_strain_action.py | tee result-53-${{ matrix.bits }}.json
+      - name: Run rigid-rotation productivity gauge test
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/54_rigid_rotation_productivity_gauge.py | tee result-54-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -378,4 +428,10 @@ jobs:
             result-46-${{ matrix.bits }}.json
             result-47-${{ matrix.bits }}.json
             result-48-${{ matrix.bits }}.json
+            result-49-${{ matrix.bits }}.json
+            result-50-${{ matrix.bits }}.json
+            result-51-${{ matrix.bits }}.json
+            result-52-${{ matrix.bits }}.json
+            result-53-${{ matrix.bits }}.json
+            result-54-${{ matrix.bits }}.json
           if-no-files-found: warn
