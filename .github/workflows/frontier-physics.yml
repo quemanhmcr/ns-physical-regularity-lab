@@ -107,6 +107,8 @@ on:
       - 'experiments/114_degree4_null_surface_hodge_spectrum.py'
       - 'experiments/115_canonical_l4_null_potential.py'
       - 'experiments/116_l4_null_affine_servo_response.py'
+      - 'experiments/117_l4_affine_response_surface_spectrum.py'
+      - 'experiments/118_l4_affine_krylov_response_dimension.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -148,6 +150,7 @@ on:
       - 'theory/49_stationary_carrier_self_depletion_and_shape_servo.md'
       - 'theory/50_sharp_manifold_nonlinear_instability.md'
       - 'theory/51_intrinsic_angular_null_response.md'
+      - 'theory/52_affine_l4_servo_closure.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -895,6 +898,20 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/116_l4_null_affine_servo_response.py | tee result-116-${{ matrix.bits }}.json
+      - name: Resolve affine l4 null response surface spectrum
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/117_l4_affine_response_surface_spectrum.py | tee result-117-${{ matrix.bits }}.json
+      - name: Measure intrinsic affine l4 Krylov response dimension
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/118_l4_affine_krylov_response_dimension.py | tee result-118-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -1004,4 +1021,6 @@ jobs:
             result-114-${{ matrix.bits }}.json
             result-115-${{ matrix.bits }}.json
             result-116-${{ matrix.bits }}.json
+            result-117-${{ matrix.bits }}.json
+            result-118-${{ matrix.bits }}.json
           if-no-files-found: warn
