@@ -29,6 +29,7 @@ on:
       - 'experiments/35_harmonic_ancestry_heat_protection.py'
       - 'experiments/36_burgers_material_renewal_conveyor.py'
       - 'experiments/37_closed_ring_transaction_decoupling.py'
+      - 'experiments/38_directed_transaction_network.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -42,6 +43,7 @@ on:
       - 'theory/21_capacity_transaction_spacetime.md'
       - 'theory/22_intrinsic_hodge_period_flux_duality.md'
       - 'theory/23_productive_ancestry_worldsheet.md'
+      - 'theory/24_directed_transaction_network.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -243,6 +245,13 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/37_closed_ring_transaction_decoupling.py | tee result-37-${{ matrix.bits }}.json
+      - name: Run directed transaction-network attack
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/38_directed_transaction_network.py | tee result-38-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -274,4 +283,5 @@ jobs:
             result-35-${{ matrix.bits }}.json
             result-36-${{ matrix.bits }}.json
             result-37-${{ matrix.bits }}.json
+            result-38-${{ matrix.bits }}.json
           if-no-files-found: warn
