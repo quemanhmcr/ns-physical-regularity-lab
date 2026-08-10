@@ -25,6 +25,10 @@ on:
       - 'experiments/31_spacetime_circulation_ledger.py'
       - 'experiments/32_frobenius_cross_section_gate.py'
       - 'experiments/33_hodge_period_flux_duality.py'
+      - 'experiments/34_material_hodge_shape_derivative.py'
+      - 'experiments/35_harmonic_ancestry_heat_protection.py'
+      - 'experiments/36_burgers_material_renewal_conveyor.py'
+      - 'experiments/37_closed_ring_transaction_decoupling.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -37,6 +41,7 @@ on:
       - 'theory/20_frozen_flux_stretch_thin_leak.md'
       - 'theory/21_capacity_transaction_spacetime.md'
       - 'theory/22_intrinsic_hodge_period_flux_duality.md'
+      - 'theory/23_productive_ancestry_worldsheet.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -210,6 +215,34 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/33_hodge_period_flux_duality.py | tee result-33-${{ matrix.bits }}.json
+      - name: Run material Hodge shape derivative
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/34_material_hodge_shape_derivative.py | tee result-34-${{ matrix.bits }}.json
+      - name: Run harmonic ancestry heat protection
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/35_harmonic_ancestry_heat_protection.py | tee result-35-${{ matrix.bits }}.json
+      - name: Run Burgers material renewal conveyor
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/36_burgers_material_renewal_conveyor.py | tee result-36-${{ matrix.bits }}.json
+      - name: Attack closed-ring transaction/self-geometry coupling
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/37_closed_ring_transaction_decoupling.py | tee result-37-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -237,4 +270,8 @@ jobs:
             result-31-${{ matrix.bits }}.json
             result-32-${{ matrix.bits }}.json
             result-33-${{ matrix.bits }}.json
+            result-34-${{ matrix.bits }}.json
+            result-35-${{ matrix.bits }}.json
+            result-36-${{ matrix.bits }}.json
+            result-37-${{ matrix.bits }}.json
           if-no-files-found: warn
