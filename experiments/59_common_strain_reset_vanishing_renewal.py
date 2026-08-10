@@ -23,14 +23,13 @@ lim_gap=T0-Tcrest_zero
 if not (lim_gap>arb('0.35')): raise AssertionError(('limiting finite Gram excursion',lim_gap))
 rows=[]
 for es in ['1e-30','1e-24','1e-18','1e-12','1e-6','0.01']:
-    eps=arb(es); Qc=L+eps*Ic; Q1=L+eps*I1
+    eps=arb(es); deposit_crest=eps*Ic; deposited=eps*I1; Qc=L+deposit_crest; Q1=L+deposited
     Tc=Tabs(arb(2),Qc); T1=Tabs(arb(1),Q1)
     half_drop=T0-Tc; return_error=T1-T0
-    deposited=Q1-L
     certify_one(deposited/(eps*I1),('exact deposited bridge memory',es))
     # Finite shape excursion persists as eps -> 0 while normalized pair-cell renewal per cycle vanishes.
     if not (half_drop>arb('0.3')): raise AssertionError(('finite shape excursion lost',es,half_drop))
-    rel_D_renewal=(Q1-L)/L  # exact relative change of |D| because |D|=eps^2 Q
+    rel_D_renewal=deposited/L  # exact relative change of |D| because |D|=eps^2 Q
     if eps <= arb('1e-6') and not (rel_D_renewal < arb('1e-5')): raise AssertionError(('renewal not small',es,rel_D_renewal))
     rows.append({'eps':es,'T_initial':str(T0),'T_crest':str(Tc),'T_next_return':str(T1),'finite_halfcycle_T_drop':str(half_drop),'next_return_T_error':str(return_error),'deposited_Q':str(deposited),'relative_pair_cell_renewal':str(rel_D_renewal)})
 

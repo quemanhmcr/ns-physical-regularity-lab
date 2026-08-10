@@ -68,6 +68,8 @@ But the non-affine pair-cell renewal is controlled by
 
 `Qdot=eps lambda^2`.
 
+Numerically, the deposited memory must be observed directly as `Delta Q=eps Delta I`, not reconstructed as `Q_after-Q_before` when `eps` is tiny.  The latter needlessly subtracts a small physical tail from an order-one parent bridge coordinate.
+
 Let `eps -> 0+` while keeping a fixed finite-amplitude stretch excursion `lambda:1->2->1`.  Then the Gram excursion remains finite while the deposited bridge memory and relative pair-cell renewal tend to zero.
 
 Therefore
