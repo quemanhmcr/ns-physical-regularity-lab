@@ -24,6 +24,7 @@ on:
       - 'experiments/30_transaction_reynolds_clock.py'
       - 'experiments/31_spacetime_circulation_ledger.py'
       - 'experiments/32_frobenius_cross_section_gate.py'
+      - 'experiments/33_hodge_period_flux_duality.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -35,6 +36,7 @@ on:
       - 'theory/19_material_circulation_ancestry.md'
       - 'theory/20_frozen_flux_stretch_thin_leak.md'
       - 'theory/21_capacity_transaction_spacetime.md'
+      - 'theory/22_intrinsic_hodge_period_flux_duality.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -201,6 +203,13 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/32_frobenius_cross_section_gate.py | tee result-32-${{ matrix.bits }}.json
+      - name: Run intrinsic Hodge period-flux duality
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/33_hodge_period_flux_duality.py | tee result-33-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -227,4 +236,5 @@ jobs:
             result-30-${{ matrix.bits }}.json
             result-31-${{ matrix.bits }}.json
             result-32-${{ matrix.bits }}.json
+            result-33-${{ matrix.bits }}.json
           if-no-files-found: warn
