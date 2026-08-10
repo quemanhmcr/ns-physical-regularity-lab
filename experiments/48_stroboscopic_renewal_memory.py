@@ -9,7 +9,14 @@ pi=arb.pi(); sqrt2=arb(2).sqrt(); sqrt5=arb(5).sqrt()
 def certify_one(x,label,tol='1e-30'):
     t=arb(tol)
     if not x.contains(1) or not (x > 1-t and x < 1+t):
-        raise AssertionError((label,'ratio not tightly certified around one',x))
+        raise AssertionError((label,'exact ratio not tightly certified around one',x))
+
+def certify_near_one(x,label,tol='1e-20'):
+    # Asymptotic ratios are not identities: require the whole Arb interval to lie
+    # inside the requested neighborhood, but do not require it to contain exactly 1.
+    t=arb(tol)
+    if not (x > 1-t and x < 1+t):
+        raise AssertionError((label,'asymptotic ratio outside tolerance',x,t))
 
 etas=['1e-6','0.1','1','10','1e6']
 epss=['1e-6','1','1e6']
@@ -46,11 +53,11 @@ for etas_ in etas:
       k=arb('1e30'); Q=L+eps*k*pi*C; R2=Q*Q+5
       Tmag=Q/(sqrt2*R2.sqrt()); G=sqrt2/R2; P=Q*Q/(sqrt2*R2*R2)
       Kba=sqrt2*Q/R2; Kab=Q/(2*R2)
-      certify_one(Tmag*sqrt2,('T -> 1/sqrt2',etas_,epss_,Ls_),tol='1e-20')
-      certify_one(G*Q*Q/sqrt2,('G ~ sqrt2/Q^2',etas_,epss_,Ls_),tol='1e-20')
-      certify_one(P*sqrt2*Q*Q,('P ~ 1/(sqrt2 Q^2)',etas_,epss_,Ls_),tol='1e-20')
-      certify_one(Kba*Q/sqrt2,('Kba ~ sqrt2/Q',etas_,epss_,Ls_),tol='1e-20')
-      certify_one(Kab*2*Q,('Kab ~ 1/(2Q)',etas_,epss_,Ls_),tol='1e-20')
+      certify_near_one(Tmag*sqrt2,('T -> 1/sqrt2',etas_,epss_,Ls_),tol='1e-20')
+      certify_near_one(G*Q*Q/sqrt2,('G ~ sqrt2/Q^2',etas_,epss_,Ls_),tol='1e-20')
+      certify_near_one(P*sqrt2*Q*Q,('P ~ 1/(sqrt2 Q^2)',etas_,epss_,Ls_),tol='1e-20')
+      certify_near_one(Kba*Q/sqrt2,('Kba ~ sqrt2/Q',etas_,epss_,Ls_),tol='1e-20')
+      certify_near_one(Kab*2*Q,('Kab ~ 1/(2Q)',etas_,epss_,Ls_),tol='1e-20')
       asym.append({'eta':etas_,'eps':epss_,'L':Ls_,'Q_at_1e30_periods':str(Q),'Tmag_times_sqrt2':str(Tmag*sqrt2),'G_Q2_over_sqrt2':str(G*Q*Q/sqrt2),'P_sqrt2_Q2':str(P*sqrt2*Q*Q),'Kba_Q_over_sqrt2':str(Kba*Q/sqrt2),'Kab_2Q':str(Kab*2*Q),'finite_total_angular_log_reserve':str(angular_reserve)})
 
 print(json.dumps({

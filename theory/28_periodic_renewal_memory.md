@@ -134,6 +134,8 @@ and
 
 Repeated surplus events become weaker and only fill a bounded angular reservoir.
 
+Numerically, asymptotic ratios must be tested as **near-one inequalities**, not as exact identities.  Requiring an Arb interval for a finite-`k` asymptotic ratio to contain exactly one can turn low-precision interval width into a false green and higher precision into a false failure.
+
 ## ATTACK — the longitudinal gate records the renewal history
 
 At the same stroboscopic times,

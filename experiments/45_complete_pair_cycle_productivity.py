@@ -57,11 +57,17 @@ for ds in ['1e-24','1','1e24']:
     pdot=vadd(matvec(Aa,p),vscale(nu,lap_p))
     qdot=vadd(matvec(Ab,q),vscale(nu,lap_q))
     Rdot=matvec(Abar,R)
-    Ddot=det(pdot,R,q)+det(p,Rdot,q)+det(p,R,qdot)
+    # Common affine action is an exact trace mode.  Certify it separately instead of
+    # observing a tiny physical residual as a difference of O(1) parent determinants.
+    Ddot_common=det(matvec(Abar,p),R,q)+det(p,Rdot,q)+det(p,R,matvec(Abar,q))
+    if not Ddot_common.contains(0): raise AssertionError(('common affine D mode not zero',Ddot_common))
+    p_res=vadd(matvec(Da,p),vscale(nu,lap_p))
+    q_res=vadd(matvec(Db,q),vscale(nu,lap_q))
+    Ddot_residual=det(p_res,R,q)+det(p,R,q_res)
     Jbridge=det(matvec(Da,p),R,q)+det(p,R,matvec(Db,q))
     Jnu=nu*(det(lap_p,R,q)+det(p,R,lap_q))
     predD=Jbridge+Jnu
-    certify_one(Ddot/predD,('D bridge/visc balance',ds,ns))
+    certify_one(Ddot_residual/predD,('D bridge/visc residual balance',ds,ns))
 
     Ladot=dot(pdot,R)+dot(p,Rdot)
     Lbdot=dot(qdot,R)+dot(q,Rdot)
@@ -71,12 +77,12 @@ for ds in ['1e-24','1','1e24']:
     certify_one(Lbdot/predLb,('Lb longitudinal balance',ds,ns))
 
     sigma_a=dot(p,pdot)/(ra*ra); sigma_b=dot(q,qdot)/(rb*rb); sigma_R=dot(R,Rdot)/(rr*rr)
-    lambda_D=Ddot/D; lambda_La=Ladot/La; lambda_Lb=Lbdot/Lb
+    lambda_D=Ddot_residual/D; lambda_La=Ladot/La; lambda_Lb=Lbdot/Lb
     Tlog=lambda_D-sigma_a-sigma_b-sigma_R
     Glog=lambda_La+lambda_Lb-sigma_a-sigma_b-2*sigma_R
     Plog=2*lambda_D+lambda_La+lambda_Lb-3*sigma_a-3*sigma_b-4*sigma_R
     if not (Plog-(2*Tlog+Glog)).contains(0): raise AssertionError(('full cycle log decomposition',ds,ns,Plog,2*Tlog+Glog))
-    rows.append({'defect_scale':ds,'nu':ns,'Ddot_over_D':str(lambda_D),'La_dot_over_La':str(lambda_La),'Lb_dot_over_Lb':str(lambda_Lb),'T_log_rate':str(Tlog),'G_log_rate':str(Glog),'P_log_rate':str(Plog),'D_balance_ratio':str(Ddot/predD),'La_balance_ratio':str(Ladot/predLa),'Lb_balance_ratio':str(Lbdot/predLb)})
+    rows.append({'defect_scale':ds,'nu':ns,'Ddot_over_D':str(lambda_D),'common_affine_Ddot':str(Ddot_common),'residual_D_balance_ratio':str(Ddot_residual/predD),'La_dot_over_La':str(lambda_La),'Lb_dot_over_Lb':str(lambda_Lb),'T_log_rate':str(Tlog),'G_log_rate':str(Glog),'P_log_rate':str(Plog),'D_balance_ratio':str(Ddot_residual/predD),'La_balance_ratio':str(Ladot/predLa),'Lb_balance_ratio':str(Lbdot/predLb)})
 
 print(json.dumps({
  'arb_precision_bits':BITS,'status':'PASS','cases':len(rows),
