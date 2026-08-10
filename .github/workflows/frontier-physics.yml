@@ -105,6 +105,8 @@ on:
       - 'experiments/112_sharp_carrier_nonlinear_null_generation.py'
       - 'experiments/113_nonlinear_homogeneous_source_split.py'
       - 'experiments/114_degree4_null_surface_hodge_spectrum.py'
+      - 'experiments/115_canonical_l4_null_potential.py'
+      - 'experiments/116_l4_null_affine_servo_response.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -879,6 +881,20 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/114_degree4_null_surface_hodge_spectrum.py | tee result-114-${{ matrix.bits }}.json
+      - name: Reconstruct canonical l4 null potential
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/115_canonical_l4_null_potential.py | tee result-115-${{ matrix.bits }}.json
+      - name: Test best-aligned l4 affine null servo
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/116_l4_null_affine_servo_response.py | tee result-116-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -986,4 +1002,6 @@ jobs:
             result-112-${{ matrix.bits }}.json
             result-113-${{ matrix.bits }}.json
             result-114-${{ matrix.bits }}.json
+            result-115-${{ matrix.bits }}.json
+            result-116-${{ matrix.bits }}.json
           if-no-files-found: warn

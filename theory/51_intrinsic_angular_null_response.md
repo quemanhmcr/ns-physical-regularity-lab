@@ -74,3 +74,19 @@ Only after this spectrum is known should one ask whether a finite collection of 
 3. Ask whether cancellation at degree four closes, or whether interaction of the correction with the base carrier necessarily generates degree six/eight response outside the previous sector.
 
 The objective is not to assume an infinite hierarchy.  It is to let the Euler nonlinearity reveal whether one exists.
+
+## Canonical `l=4` null potential and first servo test
+
+If the remote spectrum is purely toroidal `l=4`, define its scalar potential intrinsically by
+
+`N_4=n cross grad_S psi_4`,
+
+`psi_4=-(1/20) curl_S N_4`.
+
+Because the generated field is homogeneous degree four, `psi_4` has a homogeneous harmonic extension to the source ball.  This supplies a canonical null coordinate with no modal basis choice.
+
+The most favorable first cancellation attempt is then to use the same `N_4` direction as a servo.  Its affine vorticity response under the stationary pair strain is
+
+`L_S N_4=S N_4-(Sx.grad)N_4`.
+
+Project `L_S N_4` again into productive and transaction-null parts.  If the null part is exactly proportional to `N_4`, a one-amplitude servo can in principle cancel the first null generation at affine order.  If an orthogonal null component is generated, even that best-aligned one-channel maintenance strategy fails and a larger response space is required.
