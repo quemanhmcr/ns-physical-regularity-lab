@@ -91,6 +91,10 @@ on:
       - 'experiments/98_shape_locked_frozen_conveyor_scaling.py'
       - 'experiments/99_flux_turnover_vs_volume_conveyor.py'
       - 'experiments/100_extremal_peak_vorticity_to_strain.py'
+      - 'experiments/101_frozen_vortex_specific_volume_invariant.py'
+      - 'experiments/102_axisymmetric_sharp_loop_ancestry_cutoff.py'
+      - 'experiments/103_self_contained_frozen_flux_volume_bound.py'
+      - 'experiments/104_slow_spiral_null_topology_escape.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -127,6 +131,7 @@ on:
       - 'theory/44_cumulative_source_reynolds_and_flux_aggregation.md'
       - 'theory/45_hodge_viscous_source_corridor.md'
       - 'theory/46_frozen_amplification_conveyor.md'
+      - 'theory/47_frozen_specific_volume_and_throughgoing_escape.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -762,6 +767,34 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/100_extremal_peak_vorticity_to_strain.py | tee result-100-${{ matrix.bits }}.json
+      - name: Run frozen vortex specific-volume invariant
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/101_frozen_vortex_specific_volume_invariant.py | tee result-101-${{ matrix.bits }}.json
+      - name: Run axisymmetric sharp-loop ancestry cutoff
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/102_axisymmetric_sharp_loop_ancestry_cutoff.py | tee result-102-${{ matrix.bits }}.json
+      - name: Run self-contained frozen-flux volume bound
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/103_self_contained_frozen_flux_volume_bound.py | tee result-103-${{ matrix.bits }}.json
+      - name: Attack near-sharp topology with slow spiral
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/104_slow_spiral_null_topology_escape.py | tee result-104-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -855,4 +888,8 @@ jobs:
             result-98-${{ matrix.bits }}.json
             result-99-${{ matrix.bits }}.json
             result-100-${{ matrix.bits }}.json
+            result-101-${{ matrix.bits }}.json
+            result-102-${{ matrix.bits }}.json
+            result-103-${{ matrix.bits }}.json
+            result-104-${{ matrix.bits }}.json
           if-no-files-found: warn
