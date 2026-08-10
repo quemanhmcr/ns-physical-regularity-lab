@@ -63,6 +63,13 @@ on:
       - 'experiments/69_stationary_capacity_amplifier.py'
       - 'experiments/70_stationary_amplifier_fixed_scale_ceiling.py'
       - 'experiments/71_complete_pair_hodge_transaction_frame.py'
+      - 'experiments/72_sharp_angular_transaction_enstrophy.py'
+      - 'experiments/73_tangent_carrier_transaction_extremizer.py'
+      - 'experiments/74_capacity_pure_production_transaction_floor.py'
+      - 'experiments/75_extremal_transaction_levelset_geometry.py'
+      - 'experiments/76_tangent_carrier_energy_enstrophy_extremal.py'
+      - 'experiments/77_ball_productive_vorticity_projector.py'
+      - 'experiments/79_native_hodge_annulus_action.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -89,6 +96,8 @@ on:
       - 'theory/34_fixed_scale_reset_source_trilemma.md'
       - 'theory/35_productive_pair_strain_frame.md'
       - 'theory/36_stationary_productive_amplifier.md'
+      - 'theory/37_sharp_hodge_transaction_carrier.md'
+      - 'theory/38_maximum_vorticity_inward_transaction_cascade.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -528,6 +537,55 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/71_complete_pair_hodge_transaction_frame.py | tee result-71-${{ matrix.bits }}.json
+      - name: Run sharp angular transaction-enstrophy theorem
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/72_sharp_angular_transaction_enstrophy.py | tee result-72-${{ matrix.bits }}.json
+      - name: Verify tangent carrier is the sharp transaction extremizer
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/73_tangent_carrier_transaction_extremizer.py | tee result-73-${{ matrix.bits }}.json
+      - name: Run capacity pure-production transaction floor
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/74_capacity_pure_production_transaction_floor.py | tee result-74-${{ matrix.bits }}.json
+      - name: Run extremal transaction level-set geometry
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/75_extremal_transaction_levelset_geometry.py | tee result-75-${{ matrix.bits }}.json
+      - name: Run tangent carrier energy-enstrophy extremal calibration
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/76_tangent_carrier_energy_enstrophy_extremal.py | tee result-76-${{ matrix.bits }}.json
+      - name: Run ball productive-vorticity projector
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/77_ball_productive_vorticity_projector.py | tee result-77-${{ matrix.bits }}.json
+      - name: Run native Hodge annulus action factor
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/79_native_hodge_annulus_action.py | tee result-79-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -593,4 +651,11 @@ jobs:
             result-69-${{ matrix.bits }}.json
             result-70-${{ matrix.bits }}.json
             result-71-${{ matrix.bits }}.json
+            result-72-${{ matrix.bits }}.json
+            result-73-${{ matrix.bits }}.json
+            result-74-${{ matrix.bits }}.json
+            result-75-${{ matrix.bits }}.json
+            result-76-${{ matrix.bits }}.json
+            result-77-${{ matrix.bits }}.json
+            result-79-${{ matrix.bits }}.json
           if-no-files-found: warn
