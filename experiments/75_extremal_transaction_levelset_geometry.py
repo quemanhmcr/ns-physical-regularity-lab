@@ -16,7 +16,9 @@ rows=[]
 for p in pts:
     nn=norm(p); n=tuple(x/nn for x in p); Qn=mv(Q,n); qnn=dot(n,Qn)
     grad=scale(2,sub(Qn,scale(qnn,n))); omega=scale(-arb(5)/3,cross(n,Qn))
-    if not dot(n,omega).contains(0): raise AssertionError(('not sphere tangent',dot(n,omega)))
-    if not dot(grad,omega).contains(0): raise AssertionError(('not level-set tangent',dot(grad,omega)))
-    rows.append({'n':[str(x) for x in n],'f_nQn':str(qnn),'gradS_f_norm':str(norm(grad)),'omega_ext_norm':str(norm(omega)),'n_dot_omega':str(dot(n,omega)),'grad_f_dot_omega':str(dot(grad,omega))})
+    raw_n=dot(n,omega); raw_g=dot(grad,omega)
+    if not raw_n.contains(0) or not raw_g.contains(0): raise AssertionError(('raw structural cancellation excluded zero',raw_n,raw_g))
+    # Structural certificate: n.(n cross Qn)=0 and [Qn-(n.Qn)n].(n cross Qn)=0 before parent terms are formed.
+    structural_n=arb(0); structural_g=arb(0)
+    rows.append({'n':[str(x) for x in n],'f_nQn':str(qnn),'gradS_f_norm':str(norm(grad)),'omega_ext_norm':str(norm(omega)),'structural_n_dot_omega':str(structural_n),'structural_grad_f_dot_omega':str(structural_g),'raw_n_dot_omega':str(raw_n),'raw_grad_f_dot_omega':str(raw_g)})
 print(json.dumps({'arb_precision_bits':BITS,'status':'PASS','cases':len(rows),'structural_surface_divergence':'zero: omega_ext=-(5/6)n cross grad_S f is a rotated surface gradient','interpretation':'The sharp equality field is tangent to the sphere and to level curves of f(n)=n.Q.n. The minimum transaction carrier therefore has intrinsic quadratic-level-set organization rather than an imposed filament closure.','rows':rows},indent=2,allow_nan=False))
