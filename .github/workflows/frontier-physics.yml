@@ -49,6 +49,15 @@ on:
       - 'experiments/55_productive_gram_capacity.py'
       - 'experiments/56_productive_gram_boundary_modes.py'
       - 'experiments/57_productive_gram_current.py'
+      - 'experiments/58_gram_holonomy_gauge_attack.py'
+      - 'experiments/59_common_strain_reset_vanishing_renewal.py'
+      - 'experiments/60_hodge_reset_strain_occupancy.py'
+      - 'experiments/61_accelerated_reset_hodge_scale.py'
+      - 'experiments/62_shape_generated_reset_tensors.py'
+      - 'experiments/63_hodge_screened_shape_transaction.py'
+      - 'experiments/64_projected_harmonic_reset_floor.py'
+      - 'experiments/65_midpoint_hodge_shape_source_split.py'
+      - 'experiments/66_fixed_scale_harmonic_reset_bound.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -70,6 +79,9 @@ on:
       - 'theory/29_closed_network_memory.md'
       - 'theory/30_recurrence_reset_action.md'
       - 'theory/31_productive_gram_chamber.md'
+      - 'theory/32_holonomy_gauge_and_common_strain_escape.md'
+      - 'theory/33_hodge_screened_productive_shape_current.md'
+      - 'theory/34_fixed_scale_reset_source_trilemma.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -411,6 +423,69 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/57_productive_gram_current.py | tee result-57-${{ matrix.bits }}.json
+      - name: Attack lifted Gram holonomy gauge
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/58_gram_holonomy_gauge_attack.py | tee result-58-${{ matrix.bits }}.json
+      - name: Run common-strain reset/renewal decoupling
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/59_common_strain_reset_vanishing_renewal.py | tee result-59-${{ matrix.bits }}.json
+      - name: Run Hodge reset-strain occupancy calibration
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/60_hodge_reset_strain_occupancy.py | tee result-60-${{ matrix.bits }}.json
+      - name: Run accelerated reset Hodge-scale microscope
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/61_accelerated_reset_hodge_scale.py | tee result-61-${{ matrix.bits }}.json
+      - name: Run shape-generated reset-tensor microscope
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/62_shape_generated_reset_tensors.py | tee result-62-${{ matrix.bits }}.json
+      - name: Run Hodge-screened shape-transaction microscope
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/63_hodge_screened_shape_transaction.py | tee result-63-${{ matrix.bits }}.json
+      - name: Run projected harmonic reset-floor calibration
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/64_projected_harmonic_reset_floor.py | tee result-64-${{ matrix.bits }}.json
+      - name: Run midpoint Hodge shape-source split
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/65_midpoint_hodge_shape_source_split.py | tee result-65-${{ matrix.bits }}.json
+      - name: Run fixed-scale harmonic reset bound
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/66_fixed_scale_harmonic_reset_bound.py | tee result-66-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -462,4 +537,13 @@ jobs:
             result-55-${{ matrix.bits }}.json
             result-56-${{ matrix.bits }}.json
             result-57-${{ matrix.bits }}.json
+            result-58-${{ matrix.bits }}.json
+            result-59-${{ matrix.bits }}.json
+            result-60-${{ matrix.bits }}.json
+            result-61-${{ matrix.bits }}.json
+            result-62-${{ matrix.bits }}.json
+            result-63-${{ matrix.bits }}.json
+            result-64-${{ matrix.bits }}.json
+            result-65-${{ matrix.bits }}.json
+            result-66-${{ matrix.bits }}.json
           if-no-files-found: warn
