@@ -98,6 +98,10 @@ on:
       - 'experiments/105_winding_transaction_reuse.py'
       - 'experiments/106_critical_frozen_winding_conveyor.py'
       - 'experiments/107_critical_winding_budget_audit.py'
+      - 'experiments/108_asymmetric_stationary_shape_lock_tensor.py'
+      - 'experiments/109_tangent_carrier_self_stretch_identity.py'
+      - 'experiments/110_stationary_carrier_core_collar_split.py'
+      - 'experiments/111_two_production_rays_shape_servo.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -136,6 +140,7 @@ on:
       - 'theory/46_frozen_amplification_conveyor.md'
       - 'theory/47_frozen_specific_volume_and_throughgoing_escape.md'
       - 'theory/48_critical_frozen_winding_escape.md'
+      - 'theory/49_stationary_carrier_self_depletion_and_shape_servo.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -820,6 +825,34 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/107_critical_winding_budget_audit.py | tee result-107-${{ matrix.bits }}.json
+      - name: Run asymmetric stationary shape-lock tensor
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/108_asymmetric_stationary_shape_lock_tensor.py | tee result-108-${{ matrix.bits }}.json
+      - name: Run tangent-carrier self-stretch identity
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/109_tangent_carrier_self_stretch_identity.py | tee result-109-${{ matrix.bits }}.json
+      - name: Run stationary carrier core-collar split
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/110_stationary_carrier_core_collar_split.py | tee result-110-${{ matrix.bits }}.json
+      - name: Run two-production-ray shape servo
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/111_two_production_rays_shape_servo.py | tee result-111-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -920,4 +953,8 @@ jobs:
             result-105-${{ matrix.bits }}.json
             result-106-${{ matrix.bits }}.json
             result-107-${{ matrix.bits }}.json
+            result-108-${{ matrix.bits }}.json
+            result-109-${{ matrix.bits }}.json
+            result-110-${{ matrix.bits }}.json
+            result-111-${{ matrix.bits }}.json
           if-no-files-found: warn
