@@ -122,6 +122,8 @@ Cauchy-Schwarz in the physical STF strain space gives
 
 `j_h^2 <= |M_g|^2 |S_h|^2`.
 
+Numerically, a tiny positive vortical energy remainder should be certified directly rather than by asking an interval for `E_h+E_v` to be strictly larger than the nearly identical parent `E_h`.
+
 The exact Hodge harmonic energy floor is
 
 `E(B_r)>=(2pi/15)|S_h|^2 r^5`.
