@@ -28,7 +28,9 @@ and
 
 `=-(s_a+s_b)(s_a^2+15s_as_b+s_b^2)/8 <0`.
 
-So every positive two-endpoint stationary shape lock lies in the negative-determinant strain sector.  The bridge direction contracts at rate
+So every positive two-endpoint stationary shape lock lies in the negative-determinant strain sector.
+For extreme asymmetric gains, the small endpoint response must be certified directly in pair-frame coordinates.  Reconstructing `s_a<<s_b` by contracting the assembled Cartesian tensor subtracts order-`s_b` parent terms and creates a false precision problem even though the response-frame identity is exact.
+  The bridge direction contracts at rate
 
 `n.S_lock.n=-(s_a+s_b)`,
 
@@ -42,9 +44,9 @@ For any STF strain `S`, use its exact self-contained tangent Hodge carrier
 
 `omega_c=-(14/(3L^2))x cross Sx`.
 
-Direct invariant sphere moments give the shell-averaged logarithmic self-stretch rate
+Direct invariant sphere moments give the shell-averaged stretching coefficient `P_shell/Z_shell`
 
-`lambda_shell(r)`
+`c_shell(r)`
 
 `=(3/7)[det S/|S|^2][13(r/L)^2-7]`.
 
@@ -62,7 +64,9 @@ In the symmetric case `s_a=s_b=s`,
 
 so
 
-`lambda_global=-34s/63`.
+`P_self/Z=-34s/63`.
+
+In the enstrophy equation `(1/2) Zdot=P_self-...`, the self-stretch contribution to `d log Z/dt` is twice this coefficient, `-68s/63`.
 
 The shell rate changes sign at
 
