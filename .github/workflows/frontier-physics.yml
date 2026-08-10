@@ -12,6 +12,9 @@ on:
       - 'experiments/18_arb_hodge_certificate.py'
       - 'experiments/19_vorticity_to_strain_transaction.py'
       - 'experiments/20_transaction_gain_cost.py'
+      - 'experiments/21_vortex_lineage_transaction.py'
+      - 'experiments/22_closure_collar_tradeoff.py'
+      - 'experiments/23_oseen_strain_survival_gate.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -19,6 +22,7 @@ on:
       - 'theory/15_hodge_strain_microscope.md'
       - 'theory/16_hodge_transition_radius.md'
       - 'theory/17_vorticity_to_strain_transaction.md'
+      - 'theory/18_transaction_to_closure_lineage.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -101,6 +105,27 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/20_transaction_gain_cost.py | tee result-20-${{ matrix.bits }}.json
+      - name: Run vortex-lineage transaction microscope
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/21_vortex_lineage_transaction.py | tee result-21-${{ matrix.bits }}.json
+      - name: Run closure-collar tradeoff attack
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/22_closure_collar_tradeoff.py | tee result-22-${{ matrix.bits }}.json
+      - name: Run Oseen strain-survival gate
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/23_oseen_strain_survival_gate.py | tee result-23-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -115,4 +140,7 @@ jobs:
             result-18-${{ matrix.bits }}.json
             result-19-${{ matrix.bits }}.json
             result-20-${{ matrix.bits }}.json
+            result-21-${{ matrix.bits }}.json
+            result-22-${{ matrix.bits }}.json
+            result-23-${{ matrix.bits }}.json
           if-no-files-found: warn
