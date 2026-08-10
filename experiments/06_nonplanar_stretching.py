@@ -49,14 +49,23 @@ def rms_eff(R,G,eps,m,core_frac,N,probes=16):
 core_frac=arb('0.12')
 eps_list=['1e-4','3e-4','1e-3','3e-3','1e-2','3e-2','0.1','0.3']
 rows=[]
-# null control: m=1 is a tilted planar loop for any eps.
+# Null control: m=1 is exactly a tilted planar loop z=eps*y for any eps.
+# Do NOT feed zero-enclosing Arb balls through sig*sig -> sqrt: interval
+# dependency can make x*x straddle a tiny negative number and manufacture NaN.
+# The physical observable here is each signed stretching enclosure itself.
 for e_s in ['0.001','0.1','0.5']:
- e=arb(e_s)
- eff,vals=rms_eff(arb(1),arb(1),e,1,core_frac,128)
- for v in vals:
-  if not v.contains(0):
-   raise AssertionError(f'm=1 planar control produced stretching: eps={e_s}, sigma={v}')
- rows.append({'mode':1,'eps':e_s,'eff_rms':str(eff),'control':'planar-null'})
+ e=arb(e_s); R=arb(1); G=arb(1); core=core_frac*R; probes=16
+ vals=[]
+ for k in range(probes):
+  th=2*pi*(arb(k)+arb('0.217'))/probes
+  sig=sigma_at(th,R,G,e,1,core,128)
+  if not sig.contains(0):
+   raise AssertionError(f'm=1 planar control produced stretching: eps={e_s}, sigma={sig}')
+  vals.append(str(sig))
+ rows.append({'mode':1,'eps':e_s,'control':'planar-null',
+              'exact_geometry':'z=eps*y; tangent and chord stay in one plane, so Biot-Savart induced velocity is normal and tangent stretching is exactly zero',
+              'all_probe_sigma_intervals_contain_zero':True,
+              'probe_sigma_enclosures':vals})
 
 # genuinely 3D modes, with N refinement to make sure the observed signal is not quadrature noise.
 for m in [2,3]:
@@ -82,11 +91,13 @@ for row in scale_rows[1:]:
  if abs(row['mid']-base)/max(abs(base),1e-300)>0.02:
   raise AssertionError('dimensionless scaling check failed')
 
-print(json.dumps({
+payload={
  'arb_precision_bits':BITS,
  'status':'PASS',
  'core_over_R':'0.12',
  'interpretation':'Planarity is an exact geometric gate: m=1 remains non-stretching. Genuine 3D nonplanarity (m=2,3) turns on a dimensionless self-stretching channel; the small-amplitude data expose its leading dependence on nonplanarity without replacing Biot-Savart geometry by absolute-value bounds.',
  'rows':rows,
  'scale_checks':scale_rows
-},indent=2))
+}
+# Fail closed on non-finite JSON observers rather than allowing a green badge with NaN.
+print(json.dumps(payload,indent=2,allow_nan=False))
