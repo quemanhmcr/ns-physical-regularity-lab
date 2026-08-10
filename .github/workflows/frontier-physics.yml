@@ -36,6 +36,10 @@ on:
       - 'experiments/42_viscous_pair_cell_heat_flow.py'
       - 'experiments/43_exact_quadratic_cycle_lifetime.py'
       - 'experiments/44_normalized_cycle_survival_balance.py'
+      - 'experiments/45_complete_pair_cycle_productivity.py'
+      - 'experiments/46_periodic_quadratic_bridge_reuse.py'
+      - 'experiments/47_full_cycle_product_balance.py'
+      - 'experiments/48_stroboscopic_renewal_memory.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -52,6 +56,8 @@ on:
       - 'theory/24_directed_transaction_network.md'
       - 'theory/25_productive_cycle_lifetime.md'
       - 'theory/26_normalized_cycle_survival.md'
+      - 'theory/27_complete_pair_cycle_productivity.md'
+      - 'theory/28_periodic_renewal_memory.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -302,6 +308,34 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/44_normalized_cycle_survival_balance.py | tee result-44-${{ matrix.bits }}.json
+      - name: Run complete pair-cycle productivity anatomy
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/45_complete_pair_cycle_productivity.py | tee result-45-${{ matrix.bits }}.json
+      - name: Run periodic quadratic bridge-reuse exactness check
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/46_periodic_quadratic_bridge_reuse.py | tee result-46-${{ matrix.bits }}.json
+      - name: Run full cycle-product balance
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/47_full_cycle_product_balance.py | tee result-47-${{ matrix.bits }}.json
+      - name: Run stroboscopic renewal-memory attack
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/48_stroboscopic_renewal_memory.py | tee result-48-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -340,4 +374,8 @@ jobs:
             result-42-${{ matrix.bits }}.json
             result-43-${{ matrix.bits }}.json
             result-44-${{ matrix.bits }}.json
+            result-45-${{ matrix.bits }}.json
+            result-46-${{ matrix.bits }}.json
+            result-47-${{ matrix.bits }}.json
+            result-48-${{ matrix.bits }}.json
           if-no-files-found: warn
