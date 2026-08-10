@@ -18,6 +18,8 @@ on:
       - 'experiments/24_material_kelvin_ancestry.py'
       - 'experiments/25_annular_circulation_hodge.py'
       - 'experiments/26_single_loop_kelvin_defect_escape.py'
+      - 'experiments/27_frozen_flux_persistence.py'
+      - 'experiments/28_burgers_ancestry_clock.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -27,6 +29,7 @@ on:
       - 'theory/17_vorticity_to_strain_transaction.md'
       - 'theory/18_transaction_to_closure_lineage.md'
       - 'theory/19_material_circulation_ancestry.md'
+      - 'theory/20_frozen_flux_stretch_thin_leak.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -151,6 +154,20 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/26_single_loop_kelvin_defect_escape.py | tee result-26-${{ matrix.bits }}.json
+      - name: Run frozen-flux persistence microscope
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/27_frozen_flux_persistence.py | tee result-27-${{ matrix.bits }}.json
+      - name: Run Burgers ancestry-clock calibration
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/28_burgers_ancestry_clock.py | tee result-28-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -171,4 +188,6 @@ jobs:
             result-24-${{ matrix.bits }}.json
             result-25-${{ matrix.bits }}.json
             result-26-${{ matrix.bits }}.json
+            result-27-${{ matrix.bits }}.json
+            result-28-${{ matrix.bits }}.json
           if-no-files-found: warn
