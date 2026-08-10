@@ -58,6 +58,8 @@ on:
       - 'experiments/64_projected_harmonic_reset_floor.py'
       - 'experiments/65_midpoint_hodge_shape_source_split.py'
       - 'experiments/66_fixed_scale_harmonic_reset_bound.py'
+      - 'experiments/67_productive_pair_strain_frame.py'
+      - 'experiments/68_pair_frame_strain_reconstruction.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -82,6 +84,7 @@ on:
       - 'theory/32_holonomy_gauge_and_common_strain_escape.md'
       - 'theory/33_hodge_screened_productive_shape_current.md'
       - 'theory/34_fixed_scale_reset_source_trilemma.md'
+      - 'theory/35_productive_pair_strain_frame.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -486,6 +489,20 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/66_fixed_scale_harmonic_reset_bound.py | tee result-66-${{ matrix.bits }}.json
+      - name: Run productive pair strain-frame theorem
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/67_productive_pair_strain_frame.py | tee result-67-${{ matrix.bits }}.json
+      - name: Reconstruct strain from pair-physical responses
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/68_pair_frame_strain_reconstruction.py | tee result-68-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -546,4 +563,6 @@ jobs:
             result-64-${{ matrix.bits }}.json
             result-65-${{ matrix.bits }}.json
             result-66-${{ matrix.bits }}.json
+            result-67-${{ matrix.bits }}.json
+            result-68-${{ matrix.bits }}.json
           if-no-files-found: warn
