@@ -80,6 +80,10 @@ on:
       - 'experiments/87_ancestry_curvature_green_identity.py'
       - 'experiments/88_localized_productive_spectral_gap.py'
       - 'experiments/89_localized_transaction_reynolds_gate.py'
+      - 'experiments/90_moving_source_ancestry_flux_ledger.py'
+      - 'experiments/91_cumulative_source_reynolds_dichotomy.py'
+      - 'experiments/92_localized_extremal_flux_reynolds_relation.py'
+      - 'experiments/93_high_re_scalar_budget_escape.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -112,6 +116,8 @@ on:
       - 'theory/40_productive_radial_diffusion_hodge_self_duality.md'
       - 'theory/41_productive_kelvin_ancestry_curvature.md'
       - 'theory/42_localized_productive_spectral_gap.md'
+      - 'theory/43_source_relative_ancestry_flux_ledger.md'
+      - 'theory/44_cumulative_source_reynolds_and_flux_aggregation.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -670,6 +676,34 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/89_localized_transaction_reynolds_gate.py | tee result-89-${{ matrix.bits }}.json
+      - name: Run moving-source ancestry flux ledger
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/90_moving_source_ancestry_flux_ledger.py | tee result-90-${{ matrix.bits }}.json
+      - name: Run cumulative source-Reynolds dichotomy
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/91_cumulative_source_reynolds_dichotomy.py | tee result-91-${{ matrix.bits }}.json
+      - name: Run localized extremal flux-Reynolds relation
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/92_localized_extremal_flux_reynolds_relation.py | tee result-92-${{ matrix.bits }}.json
+      - name: Attack high-Re branch with scalar-budget escape
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/93_high_re_scalar_budget_escape.py | tee result-93-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -752,4 +786,8 @@ jobs:
             result-87-${{ matrix.bits }}.json
             result-88-${{ matrix.bits }}.json
             result-89-${{ matrix.bits }}.json
+            result-90-${{ matrix.bits }}.json
+            result-91-${{ matrix.bits }}.json
+            result-92-${{ matrix.bits }}.json
+            result-93-${{ matrix.bits }}.json
           if-no-files-found: warn
