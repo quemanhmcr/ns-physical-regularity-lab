@@ -21,9 +21,14 @@ y=arb('0.6'); sp=arb('0.8')
 for es in scales:
     e=arb(es)
     # Longitudinal starvation alpha=e: P ~ e*y*(1-y^2)*sp^2.
-    T2,P=cycle(e,y,sp); asym=e*y*(1-y*y)*sp*sp
-    certify_near_one(P/asym,('longitudinal starvation',es))
-    rows.append({'mode':'longitudinal','eps':es,'T2':str(T2),'P':str(P),'P_over_asymptote':str(P/asym)})
+    T2,P=cycle(e,y,sp); leading=e*y*(1-y*y)*sp*sp
+    ratio=P/leading
+    exact_correction=1-e*e
+    if not (ratio-exact_correction).contains(0):
+        raise AssertionError(('longitudinal exact correction',es,ratio,exact_correction))
+    if e <= arb('1e-12'):
+        certify_near_one(ratio,('longitudinal asymptotic regime',es))
+    rows.append({'mode':'longitudinal','eps':es,'T2':str(T2),'P':str(P),'P_over_linear_leading':str(ratio),'exact_correction_1_minus_eps2':str(exact_correction)})
     # Axial/transverse starvation alpha=sqrt(1-e): 1-alpha^2=e exactly, P ~ sqrt(1-e)*y*e*(1-y^2)*sp^2.
     x=(1-e).sqrt()
     # Observe the small transverse reserve e directly; do not reconstruct it as 1-x^2

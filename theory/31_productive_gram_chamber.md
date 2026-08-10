@@ -126,6 +126,8 @@ shows three distinct routes to the boundary:
 
 These are not different norms becoming large or small.  They are actual geometric ways a mutual-stretching transaction loses one of the directions needed to exist.
 
+For a longitudinal boundary parameter `alpha=eps`, the exact leading correction is `P/(C eps)=1-eps^2`; finite-`eps` data must not be certified as if the linear asymptotic were an exact identity.
+
 Moreover if `P>=kappa>0`, then automatically
 
 `T^2>=kappa`,
