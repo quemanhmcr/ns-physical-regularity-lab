@@ -20,6 +20,10 @@ on:
       - 'experiments/26_single_loop_kelvin_defect_escape.py'
       - 'experiments/27_frozen_flux_persistence.py'
       - 'experiments/28_burgers_ancestry_clock.py'
+      - 'experiments/29_cross_section_capacity_duality.py'
+      - 'experiments/30_transaction_reynolds_clock.py'
+      - 'experiments/31_spacetime_circulation_ledger.py'
+      - 'experiments/32_frobenius_cross_section_gate.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -30,6 +34,7 @@ on:
       - 'theory/18_transaction_to_closure_lineage.md'
       - 'theory/19_material_circulation_ancestry.md'
       - 'theory/20_frozen_flux_stretch_thin_leak.md'
+      - 'theory/21_capacity_transaction_spacetime.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -168,6 +173,34 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/28_burgers_ancestry_clock.py | tee result-28-${{ matrix.bits }}.json
+      - name: Run cross-section capacity duality
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/29_cross_section_capacity_duality.py | tee result-29-${{ matrix.bits }}.json
+      - name: Run transaction Reynolds clock
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/30_transaction_reynolds_clock.py | tee result-30-${{ matrix.bits }}.json
+      - name: Run material-spacetime circulation ledger
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/31_spacetime_circulation_ledger.py | tee result-31-${{ matrix.bits }}.json
+      - name: Run Frobenius cross-section gate
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/32_frobenius_cross_section_gate.py | tee result-32-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -190,4 +223,8 @@ jobs:
             result-26-${{ matrix.bits }}.json
             result-27-${{ matrix.bits }}.json
             result-28-${{ matrix.bits }}.json
+            result-29-${{ matrix.bits }}.json
+            result-30-${{ matrix.bits }}.json
+            result-31-${{ matrix.bits }}.json
+            result-32-${{ matrix.bits }}.json
           if-no-files-found: warn
