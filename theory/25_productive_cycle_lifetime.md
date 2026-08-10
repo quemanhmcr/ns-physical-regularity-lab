@@ -166,6 +166,8 @@ hence
 
 `Ddot_ab/D_ab=eps/L`.
 
+A numerical observer must respect this cancellation structurally: measuring the tiny renewal by subtracting separate `O(|a| eps^2)` determinant terms is ill-conditioned when `|a|/eps` is huge.  The physical bridge-average decomposition removes the common mode before observation.
+
 The parameter `a`, which can make both endpoint vorticity magnitudes amplify arbitrarily rapidly when `a<0`, cancels completely from the pair-cell renewal rate:
 
 `d log rho_a/dt=-a`,
