@@ -78,6 +78,8 @@ on:
       - 'experiments/85_productive_kelvin_current.py'
       - 'experiments/86_productive_kelvin_current_curvature.py'
       - 'experiments/87_ancestry_curvature_green_identity.py'
+      - 'experiments/88_localized_productive_spectral_gap.py'
+      - 'experiments/89_localized_transaction_reynolds_gate.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -109,6 +111,7 @@ on:
       - 'theory/39_extremal_clebsch_ancestry_chart.md'
       - 'theory/40_productive_radial_diffusion_hodge_self_duality.md'
       - 'theory/41_productive_kelvin_ancestry_curvature.md'
+      - 'theory/42_localized_productive_spectral_gap.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -653,6 +656,20 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/87_ancestry_curvature_green_identity.py | tee result-87-${{ matrix.bits }}.json
+      - name: Run localized productive spectral gap
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/88_localized_productive_spectral_gap.py | tee result-88-${{ matrix.bits }}.json
+      - name: Run localized transaction Reynolds gate
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/89_localized_transaction_reynolds_gate.py | tee result-89-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -733,4 +750,6 @@ jobs:
             result-85-${{ matrix.bits }}.json
             result-86-${{ matrix.bits }}.json
             result-87-${{ matrix.bits }}.json
+            result-88-${{ matrix.bits }}.json
+            result-89-${{ matrix.bits }}.json
           if-no-files-found: warn
