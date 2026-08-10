@@ -15,7 +15,9 @@ for As in ['1e-24','1','1e24']:
   L=arb(Ls)
   for xs in ['1e-6','0.1','0.8']:
    x=arb(xs); r=x*L; c4=arb('0.7'); c8=arb('-0.2')
-   q=A*(x*x+c4*x**4+c8*x**8); kernel=A*x*x; residual=q-kernel
+   kernel=A*x*x
+   # Observe the physical radial defect directly; do not reconstruct a tiny defect by subtracting two near-saturated parent profiles.
+   residual=A*(c4*x**4+c8*x**8); q=kernel+residual
    # L2 q = A/L^2 [14 c4 x^2 + 66 c8 x^6].
    f4=A/L**2*arb(14)*c4*x*x; f8=A/L**2*arb(66)*c8*x**6
    # For an original x^m residual, r^2/5 * integral screen*(L2 term) ds/s recovers that x^m exactly.

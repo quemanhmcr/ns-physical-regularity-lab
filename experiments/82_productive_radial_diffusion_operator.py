@@ -22,13 +22,16 @@ for m in [2,4,8]:
         L2=qpp+2*qp/r-6*q/(r*r)
         closed=coeff*A*x**(m-2)/(L*L)
         if m==2:
-          if not L2.contains(0): raise AssertionError(('smooth l=2 zero mode lost',As,Ls,xs,L2))
+          # Structural certificate: (m-2)(m+3)=0 before any cancellation of q'', 2q'/r and 6q/r^2 is formed.
+          structural_zero=arb(0)
+          if not L2.contains(0): raise AssertionError(('raw zero-mode observer excluded zero',As,Ls,xs,L2))
         else:
+          structural_zero=None
           certify_one(L2/closed,('l=2 radial diffusion coefficient',m,As,Ls,xs))
         # Factorization L2 q = r^-4 d_r[r^6 d_r(q/r^2)].
         Kp=A*(mm-2)*r**(m-3)/L**m
         d_r_r6Kp=A*(mm-2)*(mm+3)*r**(m+2)/L**m
         fact=d_r_r6Kp/r**4
         if not (fact-L2).contains(0): raise AssertionError(('radial factorization',m,As,Ls,xs,fact,L2))
-        rows.append({'m':m,'A':As,'L':Ls,'r_over_L':xs,'q':str(q),'L2_q':str(L2),'closed_coefficient':str(closed),'Q_over_r2_radial_derivative':str(Kp),'factorized_L2_q':str(fact)})
+        rows.append({'m':m,'A':As,'L':Ls,'r_over_L':xs,'q':str(q),'raw_L2_q':str(L2),'structural_L2_q':str(structural_zero) if structural_zero is not None else str(closed),'closed_coefficient':str(closed),'Q_over_r2_radial_derivative':str(Kp),'factorized_L2_q':str(fact)})
 print(json.dumps({'arb_precision_bits':BITS,'status':'PASS','cases':len(rows),'interpretation':'The sharp productive carrier is a toroidal l=2 field. Componentwise viscosity therefore acts on its STF radial transaction profile through L2 Q=Q_doubleprime+2Q_prime/r-6Q/r^2=r^-4 d_r[r^6 d_r(Q/r^2)]. The unique smooth radial viscosity-null profile is Q=r^2 C; this is exactly the tangent Hodge carrier profile. Local diffusion cannot be inferred from r alone when the productive carrier lies on this harmonic zero mode.','rows':rows},indent=2,allow_nan=False))

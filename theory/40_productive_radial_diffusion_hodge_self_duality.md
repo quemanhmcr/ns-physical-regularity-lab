@@ -16,6 +16,8 @@ Equivalently,
 
 This formula is componentwise and does not require a preferred eigenframe of `Q`.
 
+Numerically, the `r^2` zero mode must be certified from the structural factor `(m-2)(m+3)=0`, not from cancellation of the three order-one radial-operator terms.  Likewise a small radial defect `Q-r^2 C` should be represented directly rather than recovered by subtracting nearly equal parent profiles.
+
 ## The old tangent carrier is the unique smooth viscosity-null productive profile
 
 The radial homogeneous equation has powers `r^2` and `r^-3`.  Smoothness at the center excludes `r^-3`, so the unique smooth kernel is
