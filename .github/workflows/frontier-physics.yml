@@ -87,6 +87,10 @@ on:
       - 'experiments/94_hodge_viscous_source_corridor.py'
       - 'experiments/95_powerlaw_source_corridor.py'
       - 'experiments/96_shrinking_source_volume_recruitment_escape.py'
+      - 'experiments/97_stationary_pair_bridge_contraction.py'
+      - 'experiments/98_shape_locked_frozen_conveyor_scaling.py'
+      - 'experiments/99_flux_turnover_vs_volume_conveyor.py'
+      - 'experiments/100_extremal_peak_vorticity_to_strain.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -122,6 +126,7 @@ on:
       - 'theory/43_source_relative_ancestry_flux_ledger.md'
       - 'theory/44_cumulative_source_reynolds_and_flux_aggregation.md'
       - 'theory/45_hodge_viscous_source_corridor.md'
+      - 'theory/46_frozen_amplification_conveyor.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -729,6 +734,34 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/96_shrinking_source_volume_recruitment_escape.py | tee result-96-${{ matrix.bits }}.json
+      - name: Run stationary pair bridge contraction
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/97_stationary_pair_bridge_contraction.py | tee result-97-${{ matrix.bits }}.json
+      - name: Run shape-locked frozen conveyor scaling
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/98_shape_locked_frozen_conveyor_scaling.py | tee result-98-${{ matrix.bits }}.json
+      - name: Run flux-turnover versus volume conveyor attack
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/99_flux_turnover_vs_volume_conveyor.py | tee result-99-${{ matrix.bits }}.json
+      - name: Run extremal peak-vorticity to strain microscope
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/100_extremal_peak_vorticity_to_strain.py | tee result-100-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -818,4 +851,8 @@ jobs:
             result-94-${{ matrix.bits }}.json
             result-95-${{ matrix.bits }}.json
             result-96-${{ matrix.bits }}.json
+            result-97-${{ matrix.bits }}.json
+            result-98-${{ matrix.bits }}.json
+            result-99-${{ matrix.bits }}.json
+            result-100-${{ matrix.bits }}.json
           if-no-files-found: warn
