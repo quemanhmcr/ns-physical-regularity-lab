@@ -95,6 +95,9 @@ on:
       - 'experiments/102_axisymmetric_sharp_loop_ancestry_cutoff.py'
       - 'experiments/103_self_contained_frozen_flux_volume_bound.py'
       - 'experiments/104_slow_spiral_null_topology_escape.py'
+      - 'experiments/105_winding_transaction_reuse.py'
+      - 'experiments/106_critical_frozen_winding_conveyor.py'
+      - 'experiments/107_critical_winding_budget_audit.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -132,6 +135,7 @@ on:
       - 'theory/45_hodge_viscous_source_corridor.md'
       - 'theory/46_frozen_amplification_conveyor.md'
       - 'theory/47_frozen_specific_volume_and_throughgoing_escape.md'
+      - 'theory/48_critical_frozen_winding_escape.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -795,6 +799,27 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/104_slow_spiral_null_topology_escape.py | tee result-104-${{ matrix.bits }}.json
+      - name: Run winding transaction reuse
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/105_winding_transaction_reuse.py | tee result-105-${{ matrix.bits }}.json
+      - name: Run critical frozen winding conveyor
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/106_critical_frozen_winding_conveyor.py | tee result-106-${{ matrix.bits }}.json
+      - name: Audit critical winding scalar budgets
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/107_critical_winding_budget_audit.py | tee result-107-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -892,4 +917,7 @@ jobs:
             result-102-${{ matrix.bits }}.json
             result-103-${{ matrix.bits }}.json
             result-104-${{ matrix.bits }}.json
+            result-105-${{ matrix.bits }}.json
+            result-106-${{ matrix.bits }}.json
+            result-107-${{ matrix.bits }}.json
           if-no-files-found: warn
