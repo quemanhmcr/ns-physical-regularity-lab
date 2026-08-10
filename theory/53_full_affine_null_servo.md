@@ -35,3 +35,7 @@ If no solution exists, the critical winding mechanism cannot even cancel its fir
 If a solution exists, **promote the escape rather than hiding it**: affine sharpness maintenance is possible with finitely many response channels.  Then construct a divergence-free velocity with curl `V_servo` and test the nonlinear cross-interaction with the base localized carrier.
 
 That nonlinear step is where a genuinely new angular degree may appear.
+
+## Later Hodge-lift autopsy
+
+This file certifies the complete **affine vorticity-level** null servo, not the final physical Hodge servo.  A degree-four null vorticity has an associated tangent Hodge velocity containing an unavoidable lower-degree harmonic companion.  That companion acts on the base vorticity at the same degree-four order.  Theory 54 therefore replaces `K=P_null L_S` by the Hodge-complete operator `K_H`.  Do not promote the affine solve alone as a physical maintenance theorem.
