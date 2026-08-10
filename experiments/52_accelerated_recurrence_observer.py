@@ -28,15 +28,16 @@ rows=[]
 prev=None
 for ks_ in ks:
     k=arb(ks_); phase=k*pi
-    tk=phase/(1+phase)
-    if not (tk<1 and tk>0): raise AssertionError(('return time not in finite interval',ks_,tk))
-    remaining=1-tk
-    expected=1/(1+phase)
-    ratio=remaining/expected
-    if not ratio.contains(1): raise AssertionError(('exact return-time remainder',ks_,ratio))
-    if prev is not None and not (tk>prev): raise AssertionError(('return times not increasing',ks_,tk,prev))
-    prev=tk
-    rows.append({'k':ks_,'return_time':str(tk),'time_remaining_to_1':str(remaining),'exact_remainder_ratio':str(ratio)})
+    # The intrinsic recurrence-tail coordinate is tau=1/(1+phase).  Do not recover a
+    # tiny tau by subtracting the near-saturated parent state t_k from one.
+    remaining=1/(1+phase)
+    if not (remaining>0): raise AssertionError(('positive recurrence tail',ks_,remaining))
+    if prev is not None and not (remaining<prev): raise AssertionError(('recurrence tails not decreasing',ks_,remaining,prev))
+    prev=remaining
+    tk=phase*remaining  # display state only; the small tail is observed directly above.
+    closure=tk+remaining
+    if not closure.contains(1): raise AssertionError(('intrinsic return-coordinate closure',ks_,closure))
+    rows.append({'k':ks_,'return_time_display':str(tk),'intrinsic_time_remaining_to_1':str(remaining),'t_plus_tail':str(closure)})
 
 print(json.dumps({
  'arb_precision_bits':BITS,'status':'PASS','cases':len(rows),

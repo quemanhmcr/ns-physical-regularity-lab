@@ -92,6 +92,8 @@ Since `Q<6`, every return has a rate larger than
 
 Thus even infinitely many **uniformly positive instantaneous surplus samples** do not by themselves represent an accumulating physical resource.
 
+The recurrence tail itself must be observed intrinsically as `tau_k=1/(1+k pi)`.  Computing it as `1-t_k` after `t_k` has numerically saturated near one recreates observer complexity by subtracting a tiny physical tail from a large parent state.
+
 ## ATTACK — what actually becomes nonreusable when resets accelerate?
 
 The stretch rate is not an arbitrary analytical quantity here.  It is exactly the material logarithmic deformation rate:

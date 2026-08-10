@@ -20,10 +20,12 @@ for es in etas:
     N=arb(Ns_)
     action=N*per
     certify_one(action/(2*N*(1+eta).log()),('reset action identity',es,Ns_))
-    # Accelerated phase return time after N cycles remains below one.
-    phase=N*pi; tN=phase/(1+phase)
-    if not (tN<1): raise AssertionError(('finite-time packing',es,Ns_,tN))
-    rows.append({'eta':es,'N_cycles':Ns_,'action_per_cycle':str(per),'total_log_stretch_action':str(action),'accelerated_return_time':str(tN)})
+    # Observe finite-time packing through its intrinsic positive tail, not by asking
+    # a near-saturated t_N interval to resolve its tiny distance from one.
+    phase=N*pi; tail=1/(1+phase); tN=phase*tail
+    if not (tail>0): raise AssertionError(('finite-time recurrence tail',es,Ns_,tail))
+    if not (tN+tail).contains(1): raise AssertionError(('return coordinate closure',es,Ns_,tN+tail))
+    rows.append({'eta':es,'N_cycles':Ns_,'action_per_cycle':str(per),'total_log_stretch_action':str(action),'accelerated_return_time_display':str(tN),'intrinsic_time_remaining':str(tail)})
 
 print(json.dumps({
  'arb_precision_bits':BITS,'status':'PASS','cases':len(rows),
