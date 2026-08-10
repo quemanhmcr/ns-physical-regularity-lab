@@ -43,7 +43,15 @@ for Ps_ in Ps:
               decay=(-q).exp()
               B=A*decay
               Ev=V*B*B/4
-              Et=Eh+Ev
+              # Compute the spatially averaged total energy independently from
+              # the harmonic+vortical split.  Do not recover an exponentially
+              # small Ev by subtracting two nearly equal Arb balls.
+              Et_direct=V*(H*H + B*B/2)/2
+              split=Eh+Ev
+              split_ratio=Et_direct/split
+              if not split_ratio.contains(1):
+                  raise AssertionError(('stable harmonic/vortical energy split',Ps_,Ls_,nus_,ks_,Hs_,As_,qs_,split_ratio))
+              cross_energy=arb(0)  # mean_y cos(k y)=0 exactly
               # Exact energy dissipation of the cosine mode.
               enstrophy=V*k*k*B*B/2
               dEv_dt=-nu*k*k*V*B*B/2
@@ -53,9 +61,6 @@ for Ps_ in Ps:
               Gamma_h_now=P*H
               if not (Gamma_h_now/Gamma_h).contains(1):
                   raise AssertionError('harmonic period drifted under interior heat')
-              if not ((Et-Eh)/Ev).contains(1):
-                  raise AssertionError(('orthogonal harmonic/vortical split',Ps_,Ls_,nus_,ks_,Hs_,As_,qs_))
-
               probes=[]
               for cs in phase_cos:
                 c=arb(cs)
@@ -81,7 +86,9 @@ for Ps_ in Ps:
                 'harmonic_period':str(Gamma_h),
                 'harmonic_energy':str(Eh),
                 'vortical_energy':str(Ev),
-                'total_minus_harmonic_over_vortical':str((Et-Eh)/Ev),
+                'cross_energy':str(cross_energy),
+                'total_energy_direct':str(Et_direct),
+                'total_over_harmonic_plus_vortical':str(split_ratio),
                 'minus_dEv_dt_over_nu_enstrophy':str((-dEv_dt)/(nu*enstrophy)),
                 'loop_probes':probes,
               })
