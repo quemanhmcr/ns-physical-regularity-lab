@@ -10,7 +10,6 @@ def cross(a,b): return (a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b
 def det(a,b,c): return dot(a,cross(b,c))
 def norm(a): return dot(a,a).sqrt()
 def matvec(A,x): return tuple(sum(A[i][j]*x[j] for j in range(3)) for i in range(3))
-def msub(A,B): return tuple(tuple(A[i][j]-B[i][j] for j in range(3)) for i in range(3))
 def vsub(a,b): return tuple(a[i]-b[i] for i in range(3))
 def certify_one(x,label):
     tol=arb('1e-30')
@@ -19,6 +18,9 @@ def certify_one(x,label):
 
 def grad(a,e,y,z):
     return ((a,e*z,e*y),(arb(0),-a,arb(0)),(arb(0),arb(0),arb(0)))
+def bridge_delta_grad(e,y,z,ym,zm):
+    # Directly represent A-Abar; do not subtract two parent matrices carrying the common a mode.
+    return ((arb(0),e*(z-zm),e*(y-ym)),(arb(0),arb(0),arb(0)),(arb(0),arb(0),arb(0)))
 def vel(a,e,x,y,z): return (a*x+e*y*z,-a*y,arb(0))
 def vort(e,y,z): return (arb(0),e*y,-e*z)
 
@@ -61,7 +63,9 @@ for aas in a_vals:
       # Keep it as an independent observer only when conditioned; for extreme scale separation,
       # project out the common mode first and observe the physical bridge current directly.
       Ddot_raw=det(padot,R,pb)+det(pa,Rdot,pb)+det(pa,R,pbdot)
-      bridge=det(matvec(msub(Aa,Abar),pa),R,pb)+det(pa,R,matvec(msub(Ab,Abar),pb))
+      dAa=bridge_delta_grad(e,Xa[1],Xa[2],ym,zm)
+      dAb=bridge_delta_grad(e,Xb[1],Xb[2],ym,zm)
+      bridge=det(matvec(dAa,pa),R,pb)+det(pa,R,matvec(dAb,pb))
       Ddot_closed=-e**3
       certify_one(bridge/Ddot_closed,('bridge closed form -eps^3',aas,es,Ls_))
       raw_well_conditioned = abs(a) <= arb('1e6')*e
@@ -123,7 +127,7 @@ print(json.dumps({
  },
  'interpretation':(
    'The exact divergence-free quadratic field contains a physical endpoint pair whose Biot-Savart angular geometry is a positive two-cycle. '
-   'The common affine strain parameter can amplify both endpoint vorticity magnitudes arbitrarily rapidly yet cancels from Ddot/D, which equals eps/L and is supplied only by bridge inhomogeneity. Extreme raw derivatives are deliberately not formed as a tiny difference of huge common-affine contributions; the observer projects that mode out before certification. '
+   'The common affine strain parameter can amplify both endpoint vorticity magnitudes arbitrarily rapidly yet cancels from Ddot/D, which equals eps/L and is supplied only by bridge inhomogeneity. Extreme raw derivatives are deliberately not formed as a tiny difference of huge common-affine contributions; the observer represents the projected bridge mismatch directly rather than subtracting two parent gradient states. '
    'Consequently r*|T| must collapse whenever pair amplification outruns cell renewal; at L=2 the common affine part does not compress the separation, so the productive triple product itself collapses.'
  ),
  'rows':rows,
