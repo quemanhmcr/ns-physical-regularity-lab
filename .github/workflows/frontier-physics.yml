@@ -103,6 +103,8 @@ on:
       - 'experiments/110_stationary_carrier_core_collar_split.py'
       - 'experiments/111_two_production_rays_shape_servo.py'
       - 'experiments/112_sharp_carrier_nonlinear_null_generation.py'
+      - 'experiments/113_nonlinear_homogeneous_source_split.py'
+      - 'experiments/114_degree4_null_surface_hodge_spectrum.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -143,6 +145,7 @@ on:
       - 'theory/48_critical_frozen_winding_escape.md'
       - 'theory/49_stationary_carrier_self_depletion_and_shape_servo.md'
       - 'theory/50_sharp_manifold_nonlinear_instability.md'
+      - 'theory/51_intrinsic_angular_null_response.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -862,6 +865,20 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/112_sharp_carrier_nonlinear_null_generation.py | tee result-112-${{ matrix.bits }}.json
+      - name: Split nonlinear response by physical homogeneity
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/113_nonlinear_homogeneous_source_split.py | tee result-113-${{ matrix.bits }}.json
+      - name: Resolve degree-four null surface-Hodge spectrum
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/114_degree4_null_surface_hodge_spectrum.py | tee result-114-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -967,4 +984,6 @@ jobs:
             result-110-${{ matrix.bits }}.json
             result-111-${{ matrix.bits }}.json
             result-112-${{ matrix.bits }}.json
+            result-113-${{ matrix.bits }}.json
+            result-114-${{ matrix.bits }}.json
           if-no-files-found: warn
