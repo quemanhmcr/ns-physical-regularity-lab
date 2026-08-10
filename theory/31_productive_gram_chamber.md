@@ -160,6 +160,8 @@ Then common rigid spin cancels exactly from every Gram entry:
 
 `gammadot=f_a.b+a.f_b`.
 
+Numerically, this cancellation should be certified in the structural frame `W^T+W=0` and `tr W=0`.  Summing large raw common-spin contributions can leave a wide interval around zero and produce a false-green observer even though the exact physics is a gauge identity.
+
 The Gram determinant current is therefore
 
 `Fdot=2[alphadot beta gamma+alpha betadot gamma+alpha beta gammadot`

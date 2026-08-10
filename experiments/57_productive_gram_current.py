@@ -45,11 +45,20 @@ rows=[]
 for ws in ['1e-24','1','1e24']:
     w=arb(ws); W=((arb(0),-w,arb(0)),(w,arb(0),arb(0)),(arb(0),arb(0),arb(0)))
     Wa=mv(W,a0); Wn=mv(W,n0); Wb=mv(W,b0)
-    ca=dot(Wa,n0)+dot(a0,Wn); cb=dot(Wb,n0)+dot(b0,Wn); cg=dot(Wa,b0)+dot(a0,Wb)
-    cT=dot(Wa,cross(n0,b0))+dot(a0,cross(Wn,b0))+dot(a0,cross(n0,Wb))
+    # Keep the raw parent-state cancellation only as an observer autopsy.
+    ca_raw=dot(Wa,n0)+dot(a0,Wn); cb_raw=dot(Wb,n0)+dot(b0,Wn); cg_raw=dot(Wa,b0)+dot(a0,Wb)
+    cT_raw=dot(Wa,cross(n0,b0))+dot(a0,cross(Wn,b0))+dot(a0,cross(n0,Wb))
+    # Structural certificate: dot-product currents see W only through W^T+W, while a
+    # common linear action changes the scalar triple product by tr(W) T.  For skew W
+    # these are identically zero before any large parent terms are formed.
+    symW=tuple(tuple(W[i][j]+W[j][i] for j in range(3)) for i in range(3))
+    ca=dot(a0,mv(symW,n0)); cb=dot(b0,mv(symW,n0)); cg=dot(a0,mv(symW,b0))
+    trW=sum(W[i][i] for i in range(3)); cT=trW*T
     if not (ca.contains(0) and cb.contains(0) and cg.contains(0) and cT.contains(0)):
-        raise AssertionError(('common spin leaked into Gram current',ws,ca,cb,cg,cT))
-    rows.append({'common_spin_scale':ws,'alpha_common_rate':str(ca),'beta_common_rate':str(cb),'gamma_common_rate':str(cg),'T_common_rate':str(cT)})
+        raise AssertionError(('structural common-spin gauge failed',ws,ca,cb,cg,cT))
+    if not (ca_raw.contains(0) and cb_raw.contains(0) and cg_raw.contains(0) and cT_raw.contains(0)):
+        raise AssertionError(('raw common-spin observer excluded zero',ws,ca_raw,cb_raw,cg_raw,cT_raw))
+    rows.append({'common_spin_scale':ws,'structural_alpha_rate':str(ca),'structural_beta_rate':str(cb),'structural_gamma_rate':str(cg),'structural_T_rate':str(cT),'raw_alpha_cancellation':str(ca_raw),'raw_beta_cancellation':str(cb_raw),'raw_gamma_cancellation':str(cg_raw),'raw_T_cancellation':str(cT_raw)})
 
 print(json.dumps({
  'arb_precision_bits':BITS,'status':'PASS','common_spin_cases':len(rows),
