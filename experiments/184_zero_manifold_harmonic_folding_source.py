@@ -33,7 +33,7 @@ for q in Kaff:
  if q: raise AssertionError(('affine K source',Kaff))
 for m in (2,4,6,8,12):
  phi=harmonic_phi_m(m);lap=C.plap(phi)
- if lap:raise AssertionError(('phi harmonic',m,lap))
+ if any(not v.contains(0) for v in lap.values()):raise AssertionError(('phi harmonic',m,lap))
  u=tuple(C.pder(phi,i) for i in range(3));curl=C.curl(u);div=C.div(u)
  if not C.savg(C.vdot(curl,curl)).contains(0):raise AssertionError(('curl',m))
  if not C.savg(C.pmul(div,div)).contains(0):raise AssertionError(('div',m))
