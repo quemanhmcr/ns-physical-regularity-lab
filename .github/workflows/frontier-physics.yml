@@ -173,6 +173,8 @@ on:
       - 'experiments/178_linear_null_cap_no_multiplicity.py'
       - 'experiments/179_vorticity_zero_gradient_spectral_ancestry.py'
       - 'experiments/180_null_catalyst_forced_viscous_subscale.py'
+      - 'experiments/181_simple_vorticity_zero_viscous_genealogy.py'
+      - 'experiments/182_zero_switching_curvature_degeneracy_gate.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -1432,6 +1434,20 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/180_null_catalyst_forced_viscous_subscale.py | tee result-180-${{ matrix.bits }}.json
+      - name: Run simple vorticity zero viscous genealogy
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/181_simple_vorticity_zero_viscous_genealogy.py | tee result-181-${{ matrix.bits }}.json
+      - name: Run zero switching curvature degeneracy gate
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/182_zero_switching_curvature_degeneracy_gate.py | tee result-182-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -1605,4 +1621,6 @@ jobs:
             result-178-${{ matrix.bits }}.json
             result-179-${{ matrix.bits }}.json
             result-180-${{ matrix.bits }}.json
+            result-181-${{ matrix.bits }}.json
+            result-182-${{ matrix.bits }}.json
           if-no-files-found: warn
