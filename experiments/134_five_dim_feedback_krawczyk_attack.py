@@ -24,7 +24,8 @@ for j in range(5):
 B=[[Bcols[j][i] for j in range(5)] for i in range(5)]
 # Precision-scaled box for rigorous Krawczyk ATTACK; no midpoint recentering is used inside X evaluations.
 rad_s='1e-6' if BITS==160 else ('1e-20' if BITS==256 else '1e-50')
-X=[arb(str(v.mid())+' +/- '+rad_s) for v in a]; D=[arb('0 +/- '+rad_s) for _ in range(5)]
+R=arb('0 +/- '+rad_s)
+X=[arb(v.mid())+R for v in a]; D=[arb('0 +/- '+rad_s) for _ in range(5)]
 gX,_,_=H.reduced_feedback(st,sym,X); JX=H.reduced_jacobian(st,sym,X)
 # K(X)=a-B g(a)+(I-B J(X))(X-a).  Use interval g(a), interval J(X), point B.
 Bg=H.matvec(B,g0); center=[a[i]-Bg[i] for i in range(5)]; M=H.matmul(B,JX); I=H.eye(5); E=[[I[i][j]-M[i][j] for j in range(5)] for i in range(5)]; ED=H.matvec(E,D); K=[center[i]+ED[i] for i in range(5)]
