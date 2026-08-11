@@ -144,6 +144,7 @@ on:
       - 'experiments/149_effective_dimension_capacitary_screen.py'
       - 'experiments/150_signed_viscous_spectral_delay_packet.py'
       - 'experiments/151_finite_enstrophy_hankel_delay_construction.py'
+      - 'experiments/152_sharp_legendre_spectral_hiding_cost.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -1200,6 +1201,13 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/151_finite_enstrophy_hankel_delay_construction.py | tee result-151-${{ matrix.bits }}.json
+      - name: Run sharp Legendre spectral hiding cost
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/152_sharp_legendre_spectral_hiding_cost.py | tee result-152-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -1344,4 +1352,5 @@ jobs:
             result-149-${{ matrix.bits }}.json
             result-150-${{ matrix.bits }}.json
             result-151-${{ matrix.bits }}.json
+            result-152-${{ matrix.bits }}.json
           if-no-files-found: warn
