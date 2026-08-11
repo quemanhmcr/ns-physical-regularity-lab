@@ -155,6 +155,7 @@ on:
       - 'experiments/160_actual_affine_euler_screened_source_gate.py'
       - 'experiments/161_tiny_core_self_euler_maintenance_deficit.py'
       - 'experiments/162_tiny_core_lobe_circulation_reynolds.py'
+      - 'experiments/163_maintenance_transaction_lobe_separation.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -1288,6 +1289,13 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/162_tiny_core_lobe_circulation_reynolds.py | tee result-162-${{ matrix.bits }}.json
+      - name: Run maintenance transaction lobe separation
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/163_maintenance_transaction_lobe_separation.py | tee result-163-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -1443,4 +1451,5 @@ jobs:
             result-160-${{ matrix.bits }}.json
             result-161-${{ matrix.bits }}.json
             result-162-${{ matrix.bits }}.json
+            result-163-${{ matrix.bits }}.json
           if-no-files-found: warn
