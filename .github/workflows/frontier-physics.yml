@@ -112,6 +112,7 @@ on:
       - 'experiments/119_full_affine_null_servo.py'
       - 'experiments/120_degree4_null_hodge_velocity_lift.py'
       - 'experiments/121_hodge_linear_null_servo_closure.py'
+      - 'experiments/122_hodge_servo_nonlinear_higher_order_response.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -156,6 +157,7 @@ on:
       - 'theory/52_affine_l4_servo_closure.md'
       - 'theory/53_full_affine_null_servo.md'
       - 'theory/54_hodge_lifted_null_servo.md'
+      - 'theory/55_hodge_servo_higher_order_response.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -938,6 +940,13 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/121_hodge_linear_null_servo_closure.py | tee result-121-${{ matrix.bits }}.json
+      - name: Run Hodge-servo nonlinear higher-order response
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/122_hodge_servo_nonlinear_higher_order_response.py | tee result-122-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -1052,4 +1061,5 @@ jobs:
             result-119-${{ matrix.bits }}.json
             result-120-${{ matrix.bits }}.json
             result-121-${{ matrix.bits }}.json
+            result-122-${{ matrix.bits }}.json
           if-no-files-found: warn
