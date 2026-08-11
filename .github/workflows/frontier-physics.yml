@@ -146,6 +146,7 @@ on:
       - 'experiments/151_finite_enstrophy_hankel_delay_construction.py'
       - 'experiments/152_sharp_legendre_spectral_hiding_cost.py'
       - 'experiments/153_physical_hankel_enstrophy_hiding_floor.py'
+      - 'experiments/154_sharp_finite_time_heat_visibility_cost.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -1216,6 +1217,13 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/153_physical_hankel_enstrophy_hiding_floor.py | tee result-153-${{ matrix.bits }}.json
+      - name: Run sharp finite time heat visibility cost
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/154_sharp_finite_time_heat_visibility_cost.py | tee result-154-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -1362,4 +1370,5 @@ jobs:
             result-151-${{ matrix.bits }}.json
             result-152-${{ matrix.bits }}.json
             result-153-${{ matrix.bits }}.json
+            result-154-${{ matrix.bits }}.json
           if-no-files-found: warn
