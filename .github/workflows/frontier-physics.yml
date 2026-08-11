@@ -162,6 +162,8 @@ on:
       - 'experiments/167_broad_productive_halo_maintenance_dichotomy.py'
       - 'experiments/168_linear_null_self_productive_converter.py'
       - 'experiments/169_linear_null_catalyst_circulation_horizon.py'
+      - 'experiments/170_null_catalyst_sqrt_sourceRe_bridge.py'
+      - 'experiments/171_null_catalyst_euler_flux_preservation.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -1344,6 +1346,20 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/169_linear_null_catalyst_circulation_horizon.py | tee result-169-${{ matrix.bits }}.json
+      - name: Run null catalyst sqrt source Re bridge
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/170_null_catalyst_sqrt_sourceRe_bridge.py | tee result-170-${{ matrix.bits }}.json
+      - name: Run null catalyst Euler flux preservation
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/171_null_catalyst_euler_flux_preservation.py | tee result-171-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -1506,4 +1522,6 @@ jobs:
             result-167-${{ matrix.bits }}.json
             result-168-${{ matrix.bits }}.json
             result-169-${{ matrix.bits }}.json
+            result-170-${{ matrix.bits }}.json
+            result-171-${{ matrix.bits }}.json
           if-no-files-found: warn
