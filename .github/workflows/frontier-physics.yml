@@ -157,6 +157,8 @@ on:
       - 'experiments/162_tiny_core_lobe_circulation_reynolds.py'
       - 'experiments/163_maintenance_transaction_lobe_separation.py'
       - 'experiments/164_winding_gain_transverse_diffusion_duality.py'
+      - 'experiments/165_winding_relay_ancestry_throughput.py'
+      - 'experiments/166_oseen_material_flux_area_clock.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -1304,6 +1306,20 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/164_winding_gain_transverse_diffusion_duality.py | tee result-164-${{ matrix.bits }}.json
+      - name: Run winding relay ancestry throughput
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/165_winding_relay_ancestry_throughput.py | tee result-165-${{ matrix.bits }}.json
+      - name: Run Oseen material flux area clock
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/166_oseen_material_flux_area_clock.py | tee result-166-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -1461,4 +1477,6 @@ jobs:
             result-162-${{ matrix.bits }}.json
             result-163-${{ matrix.bits }}.json
             result-164-${{ matrix.bits }}.json
+            result-165-${{ matrix.bits }}.json
+            result-166-${{ matrix.bits }}.json
           if-no-files-found: warn
