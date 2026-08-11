@@ -71,25 +71,25 @@ def r2pow(k):
  for _ in range(k):q=pmul(q,r2)
  return q
 
+def odddf(n):
+ if n<=0:return 1
+ q=1
+ while n>0:q*=n;n-=2
+ return q
+def savgmono(e):
+ a,b,c=e
+ if a%2 or b%2 or c%2:return F(0)
+ aa,bb,cc=a//2,b//2,c//2;N=aa+bb+cc
+ return F(odddf(2*aa-1)*odddf(2*bb-1)*odddf(2*cc-1),odddf(2*N+1))
+def savg(P):
+ q=z
+ for e,v in P.items():
+  f=savgmono(e)
+  if f:q+=v*arb(f.numerator)/f.denominator
+ return q
+
 def sharp_prod4(V):
- # Only need transaction tensor zero/nonzero; exact sphere averages are implemented from monomial formula.
- from math import prod
- def odddf(n):
-  if n<=0:return 1
-  q=1
-  while n>0:q*=n;n-=2
-  return q
- def savgmono(e):
-  a,b,c=e
-  if a%2 or b%2 or c%2:return F(0)
-  aa,bb,cc=a//2,b//2,c//2;N=aa+bb+cc
-  return F(odddf(2*aa-1)*odddf(2*bb-1)*odddf(2*cc-1),odddf(2*N+1))
- def savg(P):
-  q=z
-  for e,v in P.items():
-   f=savgmono(e)
-   if f:q+=v*arb(f.numerator)/f.denominator
-  return q
+ # Only need transaction tensor zero/nonzero; use the intrinsic unit-sphere observer.
  nx=cross(X,V);Q=[[z]*3 for _ in range(3)]
  for i in range(3):
   for j in range(3):Q[i][j]=arb(3)/2*savg(padd(pmul(X[i],nx[j]),pmul(nx[i],X[j])))
@@ -130,7 +130,10 @@ for j,Hq in enumerate(hb):
  H=toarb(Hq);g=tuple(pder(H,i) for i in range(3));V=cross(X,g)
  U3=vscale(-arb(5)/22,g);U5=tuple(padd(pscale(arb(7)/22,pmul(r2,g[i])),pscale(-arb(4)/11,pmul(H,X[i]))) for i in range(3));U=vadd(U3,U5)
  if any(not x.contains(0) for x in div(V).values()):raise AssertionError(('divV4',j))
- if any(not x.contains(0) for x in vdot(X,U).values()):raise AssertionError(('tangent U4',j,vdot(X,U)))
+ bd=vdot(X,U)
+ # Mixed degree-3/5 Hodge lift is tangent on the physical source boundary r=1, not on every concentric sphere.
+ bd2=savg(pmul(bd,bd))
+ if not bd2.contains(0):raise AssertionError(('boundary tangent U4',j,bd2))
  q2=sharp_prod4(V)
  if not q2.contains(0):raise AssertionError(('toroidal l4 null transaction',j,q2))
  fields.append(V);rows.append({'sector':'toroidal','l':4,'basis_index':j,'transaction_Q_squared':str(q2)})

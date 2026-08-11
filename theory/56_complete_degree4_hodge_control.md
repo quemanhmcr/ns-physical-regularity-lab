@@ -39,3 +39,11 @@ to the complete thirty-dimensional null space and certify its rank.
 If `rank K_H=30`, the degree-four null servo is unique.  In that case there are **no silent degree-four null controls** available to tune degree-six response while preserving exact degree-four cancellation.
 
 If the rank is smaller, keep the kernel and use it adversarially against the degree-six response before making any hierarchy claim.
+
+## Observer autopsy — boundary tangency lives on the source sphere
+
+The toroidal `l=4` Hodge lift mixes degree-three harmonic and degree-five vortical velocity pieces.  Therefore `x.U` is not the zero polynomial throughout the ball.  The physical condition is only
+
+`U.n=0` on `r=1`.
+
+The first module-123 observer incorrectly demanded polynomial tangency at every radius.  The corrected certificate observes `||U.n||_{L^2(S^2)}^2=0` directly.  No precision was increased and no tolerance was loosened.
