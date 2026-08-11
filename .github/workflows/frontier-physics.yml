@@ -181,6 +181,7 @@ on:
       - 'experiments/186_harmonic_folding_shell_circulation_clock.py'
       - 'experiments/187_harmonic_folding_remote_source_persistence_gate.py'
       - 'experiments/188_critical_high_re_lineage_reuse_escape.py'
+      - 'experiments/189_critical_reuse_closure_return_escape.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -1496,6 +1497,13 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/188_critical_high_re_lineage_reuse_escape.py | tee result-188-${{ matrix.bits }}.json
+      - name: Run critical reuse closure return escape
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/189_critical_reuse_closure_return_escape.py | tee result-189-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -1677,4 +1685,5 @@ jobs:
             result-186-${{ matrix.bits }}.json
             result-187-${{ matrix.bits }}.json
             result-188-${{ matrix.bits }}.json
+            result-189-${{ matrix.bits }}.json
           if-no-files-found: warn
