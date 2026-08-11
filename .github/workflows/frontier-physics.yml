@@ -169,6 +169,8 @@ on:
       - 'experiments/174_null_catalyst_moving_cap_recruitment.py'
       - 'experiments/175_turnover_cap_kelvin_ancestry_clock.py'
       - 'experiments/176_critical_null_catalyst_forced_recruitment.py'
+      - 'experiments/177_exact_ns_infinite_recross_frozen_ancestry.py'
+      - 'experiments/178_linear_null_cap_no_multiplicity.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -1400,6 +1402,20 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/176_critical_null_catalyst_forced_recruitment.py | tee result-176-${{ matrix.bits }}.json
+      - name: Run exact NS infinite recross frozen ancestry
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/177_exact_ns_infinite_recross_frozen_ancestry.py | tee result-177-${{ matrix.bits }}.json
+      - name: Run linear null cap no multiplicity
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/178_linear_null_cap_no_multiplicity.py | tee result-178-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -1569,4 +1585,6 @@ jobs:
             result-174-${{ matrix.bits }}.json
             result-175-${{ matrix.bits }}.json
             result-176-${{ matrix.bits }}.json
+            result-177-${{ matrix.bits }}.json
+            result-178-${{ matrix.bits }}.json
           if-no-files-found: warn
