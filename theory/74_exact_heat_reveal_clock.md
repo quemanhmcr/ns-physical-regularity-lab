@@ -2,11 +2,11 @@
 
 Finite derivative hiding can be misleading. Work in the source-scaled coordinate `s=r/L`, and write a fixed angular channel as
 
-`omega = Omega b(s) X_l`,
+`omega = Omega b(s) X_l`.
 
-where `X_l = n cross grad_S Y_l`. The exact viscous time is
+The exact viscous time is
 
-`tau = nu t / L^2`.
+`tau = nu t/L^2`.
 
 For the degree-`2n` maximally delayed profile,
 
@@ -22,24 +22,28 @@ Let
 
 `Z = integral_0^1 s^(2l+2)|b|^2 ds`.
 
-For the corresponding actual vorticity enstrophy `Zeta_0` and generated lower harmonic velocity `u_h`, the angular harmonic identities give
+A natural radial-coordinate comparison is
 
-`2 E_h /(L^2 Zeta_0) = |F_l|^2 / ((l+1) Z)`.
+`A_rad = |C_l[D_l^n b]|/sqrt(Z)`,
 
-Thus the basis-independent physical Hodge-energy reveal clock is
+with exact coordinate reveal clock
 
-`Theta_l,n = [n! sqrt((l+1) Z) / |C_l[D_l^n b]|]^(1/n)`.
+`Theta_rad = [n! sqrt(Z)/|C_l[D_l^n b]|]^(1/n)`.
 
-At
+Earlier versions also reported a rescaling by `sqrt(l+1)`.  Those numbers are retained in the experiment for historical cross-run comparison only.
 
-`t = Theta_l,n L^2/nu`,
+## AUTOPSY — the companion is not an independent Hodge energy component
 
-the generated lower harmonic kinetic occupancy satisfies
+The field `C_l[a] grad H_l` is the harmonic **companion inside the tangent div-curl representation** of the vorticity channel.  It is not the Hodge-orthogonal harmonic field `h` in the physical split `u=h+v`.
 
-`2 E_h = L^2 Zeta_0`.
+The remaining radial vortical part of the tangent velocity can cancel the companion strongly away from the core.  Consequently `|C_l|^2` by itself is not a lower bound for total kinetic energy, and the previous interpretation of the rescaled clock as an independent "Hodge kinetic occupancy reveal time" is demoted.
 
-This is a physical source-scale comparison; rescaling the spherical harmonic basis cancels between input enstrophy and output harmonic energy. A second radial-coordinate clock omitting the factor `sqrt(l+1)` is reported only as an observer diagnostic.
+This resolves an apparent tension with curl-Poincare: highly concentrated radial vorticity can have small total enstrophy and small tangent velocity energy while producing a large local companion/Taylor coefficient near the center; the cancellation occurs in the full tangent field, not in the coefficient `C_l` itself.
 
-If `Theta_l,n` grows with hiding order, increasingly elaborate radial structure genuinely buys viscous invisibility time. If it stays bounded or decreases, arbitrarily many vanishing initial derivatives are only a coordinate illusion: the first nonzero derivative grows fast enough that physical feedback reappears on an `O(L^2/nu)` or shorter clock.
+What survives unchanged is the exact heat statement:
 
-Module 147 measures this exact clock to hiding order 16 at several angular channels. No conclusion is based on polynomial degree itself.
+- arbitrary finite-order initial hiding is possible;
+- for the maximally delayed polynomial the first reveal is an exact monomial in `tau`;
+- the first nonzero coefficient can grow very rapidly with hiding order.
+
+Modules 148 onward therefore treat `C_l` as a **screened local feedback/jet coordinate**, not as a separately occupied harmonic-energy reservoir.
