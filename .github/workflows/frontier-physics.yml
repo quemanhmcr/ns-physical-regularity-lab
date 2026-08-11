@@ -142,6 +142,7 @@ on:
       - 'experiments/147_exact_heat_reveal_clock.py'
       - 'experiments/148_radial_hodge_viscous_transfer_spectrum.py'
       - 'experiments/149_effective_dimension_capacitary_screen.py'
+      - 'experiments/150_signed_viscous_spectral_delay_packet.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -1184,6 +1185,13 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/149_effective_dimension_capacitary_screen.py | tee result-149-${{ matrix.bits }}.json
+      - name: Run signed viscous spectral delay packet
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/150_signed_viscous_spectral_delay_packet.py | tee result-150-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -1326,4 +1334,5 @@ jobs:
             result-147-${{ matrix.bits }}.json
             result-148-${{ matrix.bits }}.json
             result-149-${{ matrix.bits }}.json
+            result-150-${{ matrix.bits }}.json
           if-no-files-found: warn
