@@ -101,3 +101,38 @@ def feedback_jacobian(st,y):
         cols.append([dc[j]-(o if i==a else z) for i,j in enumerate(st['t4idx'])])
     # Return row-major 9x9 Jacobian.
     return [[cols[j][i] for j in range(9)] for i in range(9)]
+
+def pswap_xy(P):
+    return {(e[1],e[0],e[2]):v for e,v in P.items()}
+
+def vswap_xy(V):
+    return (pswap_xy(V[1]),pswap_xy(V[0]),pswap_xy(V[2]))
+
+def feedback_symmetry_basis(st):
+    """Return the physical x<->y fixed/anti-fixed decomposition of the 9D degree-six T4 feedback sector."""
+    Y=[st['V6b'][i] for i in st['t4idx']]
+    cols=[C.flatten(v,6) for v in Y]; sel,piv=C.independent(cols)
+    if len(sel)!=9: raise AssertionError(('T4 basis rank',len(sel)))
+    A=[[cols[j][piv[i]] for j in range(9)] for i in range(9)]
+    swapcols=[]
+    for V in Y:
+        b=C.flatten(vswap_xy(V),6); c=C.solve(A,[b[p] for p in piv]); swapcols.append(c)
+    sym=[]; anti=[]
+    for j,c in enumerate(swapcols):
+        ej=[z]*9; ej[j]=o
+        sym.append([ej[i]+c[i] for i in range(9)])
+        anti.append([ej[i]-c[i] for i in range(9)])
+    ss,_=C.independent(sym); aa,_=C.independent(anti)
+    S=[sym[i] for i in ss]; Aanti=[anti[i] for i in aa]
+    if len(S)!=5 or len(Aanti)!=4: raise AssertionError(('swap fixed dimensions',len(S),len(Aanti)))
+    _,spiv=C.independent(S)
+    Smat=[[S[j][spiv[i]] for j in range(5)] for i in range(5)]
+    return dict(Y=Y,swapcols=swapcols,S=S,Aanti=Aanti,spiv=spiv,Smat=Smat)
+
+def y_from_sym(a,sym):
+    return [sum((a[k]*sym['S'][k][i] for k in range(5)),z) for i in range(9)]
+
+def sym_coords(y,sym):
+    a=C.solve(sym['Smat'],[y[p] for p in sym['spiv']])
+    recon=y_from_sym(a,sym)
+    return a,recon

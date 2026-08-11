@@ -125,6 +125,7 @@ on:
       - 'experiments/coupled46_hodge_core.py'
       - 'experiments/131_coupled46_physical_schur_reduction.py'
       - 'experiments/132_coupled46_feedback_newton_search.py'
+      - 'experiments/133_feedback_swap_symmetry_reduction.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -175,6 +176,7 @@ on:
       - 'theory/58_degree6_triangular_hodge_servo.md'
       - 'theory/59_coupled46_physical_schur_reduction.md'
       - 'theory/60_coupled46_feedback_newton_search.md'
+      - 'theory/61_feedback_swap_symmetry.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -1034,6 +1036,13 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/132_coupled46_feedback_newton_search.py | tee result-132-${{ matrix.bits }}.json
+      - name: Run physical swap-symmetry feedback reduction
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/133_feedback_swap_symmetry_reduction.py | tee result-133-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -1159,4 +1168,5 @@ jobs:
             result-130-${{ matrix.bits }}.json
             result-131-${{ matrix.bits }}.json
             result-132-${{ matrix.bits }}.json
+            result-133-${{ matrix.bits }}.json
           if-no-files-found: warn
