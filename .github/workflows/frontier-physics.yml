@@ -161,6 +161,7 @@ on:
       - 'experiments/166_oseen_material_flux_area_clock.py'
       - 'experiments/167_broad_productive_halo_maintenance_dichotomy.py'
       - 'experiments/168_linear_null_self_productive_converter.py'
+      - 'experiments/169_linear_null_catalyst_circulation_horizon.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -1336,6 +1337,13 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/168_linear_null_self_productive_converter.py | tee result-168-${{ matrix.bits }}.json
+      - name: Run linear null catalyst circulation horizon
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/169_linear_null_catalyst_circulation_horizon.py | tee result-169-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -1497,4 +1505,5 @@ jobs:
             result-166-${{ matrix.bits }}.json
             result-167-${{ matrix.bits }}.json
             result-168-${{ matrix.bits }}.json
+            result-169-${{ matrix.bits }}.json
           if-no-files-found: warn
