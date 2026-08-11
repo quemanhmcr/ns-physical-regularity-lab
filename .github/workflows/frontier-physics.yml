@@ -150,6 +150,7 @@ on:
       - 'experiments/155_remote_high_frequency_moment_collar.py'
       - 'experiments/156_sharp_remote_collar_palinstrophy_escape.py'
       - 'experiments/157_screened_feedback_continuous_maintenance_ledger.py'
+      - 'experiments/158_stationary_affine_viscous_spectral_horizon.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -1248,6 +1249,13 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/157_screened_feedback_continuous_maintenance_ledger.py | tee result-157-${{ matrix.bits }}.json
+      - name: Run stationary affine viscous spectral horizon
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/158_stationary_affine_viscous_spectral_horizon.py | tee result-158-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -1398,4 +1406,5 @@ jobs:
             result-155-${{ matrix.bits }}.json
             result-156-${{ matrix.bits }}.json
             result-157-${{ matrix.bits }}.json
+            result-158-${{ matrix.bits }}.json
           if-no-files-found: warn
