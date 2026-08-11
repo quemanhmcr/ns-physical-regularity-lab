@@ -122,6 +122,8 @@ on:
       - 'experiments/128_complete_degree6_null_hodge_space.py'
       - 'experiments/129_full_degree6_hodge_control.py'
       - 'experiments/130_degree6_triangular_hodge_backreaction.py'
+      - 'experiments/coupled46_hodge_core.py'
+      - 'experiments/131_coupled46_physical_schur_reduction.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -170,6 +172,7 @@ on:
       - 'theory/56_complete_degree4_hodge_control.md'
       - 'theory/57_general_angular_hodge_diffusion_ladder.md'
       - 'theory/58_degree6_triangular_hodge_servo.md'
+      - 'theory/59_coupled46_physical_schur_reduction.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -1015,6 +1018,13 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/130_degree6_triangular_hodge_backreaction.py | tee result-130-${{ matrix.bits }}.json
+      - name: Run coupled degree-four/six physical Schur reduction
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/131_coupled46_physical_schur_reduction.py | tee result-131-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -1138,4 +1148,5 @@ jobs:
             result-128-${{ matrix.bits }}.json
             result-129-${{ matrix.bits }}.json
             result-130-${{ matrix.bits }}.json
+            result-131-${{ matrix.bits }}.json
           if-no-files-found: warn
