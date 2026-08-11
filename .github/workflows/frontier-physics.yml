@@ -136,6 +136,7 @@ on:
       - 'experiments/141_full_eigenframe_symmetry_p1_selection.py'
       - 'experiments/142_D2_hodge_fixed_dimension.py'
       - 'experiments/143_three_channel_eigenframe_feedback_certificate.py'
+      - 'experiments/144_radial_screened_feedback_routing.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -196,6 +197,7 @@ on:
       - 'theory/68_p1_angular_momentum_selection.md'
       - 'theory/69_eigenframe_symmetry_p1_selection.md'
       - 'theory/70_D2_fixed_hodge_response.md'
+      - 'theory/71_radial_screened_feedback_routing.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -1132,6 +1134,13 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/143_three_channel_eigenframe_feedback_certificate.py | tee result-143-${{ matrix.bits }}.json
+      - name: Run screened radial feedback routing
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/144_radial_screened_feedback_routing.py | tee result-144-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -1268,4 +1277,5 @@ jobs:
             result-141-${{ matrix.bits }}.json
             result-142-${{ matrix.bits }}.json
             result-143-${{ matrix.bits }}.json
+            result-144-${{ matrix.bits }}.json
           if-no-files-found: warn
