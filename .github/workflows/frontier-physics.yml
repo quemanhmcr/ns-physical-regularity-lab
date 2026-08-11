@@ -165,6 +165,7 @@ on:
       - 'experiments/170_null_catalyst_sqrt_sourceRe_bridge.py'
       - 'experiments/171_null_catalyst_euler_flux_preservation.py'
       - 'experiments/172_localized_null_catalyst_turnover_collar.py'
+      - 'experiments/173_critical_null_catalyst_scalar_escape.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -1368,6 +1369,13 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/172_localized_null_catalyst_turnover_collar.py | tee result-172-${{ matrix.bits }}.json
+      - name: Run critical null catalyst scalar escape
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/173_critical_null_catalyst_scalar_escape.py | tee result-173-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -1533,4 +1541,5 @@ jobs:
             result-170-${{ matrix.bits }}.json
             result-171-${{ matrix.bits }}.json
             result-172-${{ matrix.bits }}.json
+            result-173-${{ matrix.bits }}.json
           if-no-files-found: warn
