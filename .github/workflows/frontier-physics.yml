@@ -133,6 +133,7 @@ on:
       - 'experiments/138_certified_higher_response_hodge_spectrum.py'
       - 'experiments/139_radially_resummed_toroidal_hodge_channel.py'
       - 'experiments/140_p1_angular_momentum_channel_attack.py'
+      - 'experiments/141_full_eigenframe_symmetry_p1_selection.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -191,6 +192,7 @@ on:
       - 'theory/66_certified_higher_hodge_spectrum.md'
       - 'theory/67_radially_resummed_hodge_channels.md'
       - 'theory/68_p1_angular_momentum_selection.md'
+      - 'theory/69_eigenframe_symmetry_p1_selection.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -1106,6 +1108,13 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/140_p1_angular_momentum_channel_attack.py | tee result-140-${{ matrix.bits }}.json
+      - name: Run eigenframe-symmetry P1 selection
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/141_full_eigenframe_symmetry_p1_selection.py | tee result-141-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -1239,4 +1248,5 @@ jobs:
             result-138-${{ matrix.bits }}.json
             result-139-${{ matrix.bits }}.json
             result-140-${{ matrix.bits }}.json
+            result-141-${{ matrix.bits }}.json
           if-no-files-found: warn

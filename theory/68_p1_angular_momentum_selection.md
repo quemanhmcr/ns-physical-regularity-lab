@@ -21,3 +21,9 @@ The natural tangent Hodge velocity carrying this `P1` vorticity is a toroidal `l
 Module 140 attacks whether its absence is merely a consequence of the symmetric coupled root.  It evaluates higher null emissions for deliberately nonsymmetric feedback states and checks the sphere mean directly, while an explicit `P1` field serves as a sensitivity control.
 
 If `P1` remains absent generically, the next proof task is to derive the exact Noether/torque identity responsible for this selection rule.  Until that derivation is complete, the angular-momentum interpretation is a candidate mechanism, not a promoted theorem.
+
+## AUTOPSY — universal protection is false
+
+The nonsymmetric feedback attack generates large nonzero `P1` responses at degrees 8, 10 and 12, while the symmetric zero-feedback state remains `P1`-free.  Therefore the proposed universal angular-momentum protection of `P1` is false and is KILLED.
+
+The surviving observation is narrower and more interesting: the certified coupled equilibrium lies on a symmetry/compatibility branch where `P1` vanishes.  The next attack should identify the full stabilizer of the stationary strain and determine whether that symmetry, rather than a universal conservation law, forces the `P1` channel to zero.
