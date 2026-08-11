@@ -118,6 +118,10 @@ on:
       - 'experiments/125_general_toroidal_hodge_lift.py'
       - 'experiments/126_general_angular_localized_spectral_gap.py'
       - 'experiments/127_critical_winding_angular_diffusion_escape.py'
+      - 'experiments/degree6_hodge_servo_core.py'
+      - 'experiments/128_complete_degree6_null_hodge_space.py'
+      - 'experiments/129_full_degree6_hodge_control.py'
+      - 'experiments/130_degree6_triangular_hodge_backreaction.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -165,6 +169,7 @@ on:
       - 'theory/55_hodge_servo_higher_order_response.md'
       - 'theory/56_complete_degree4_hodge_control.md'
       - 'theory/57_general_angular_hodge_diffusion_ladder.md'
+      - 'theory/58_degree6_triangular_hodge_servo.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -989,6 +994,27 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/127_critical_winding_angular_diffusion_escape.py | tee result-127-${{ matrix.bits }}.json
+      - name: Build complete degree-six null Hodge space
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/128_complete_degree6_null_hodge_space.py | tee result-128-${{ matrix.bits }}.json
+      - name: Solve full degree-six diagonal Hodge control
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/129_full_degree6_hodge_control.py | tee result-129-${{ matrix.bits }}.json
+      - name: Measure degree-six triangular Hodge backreaction
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/130_degree6_triangular_hodge_backreaction.py | tee result-130-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -1109,4 +1135,7 @@ jobs:
             result-125-${{ matrix.bits }}.json
             result-126-${{ matrix.bits }}.json
             result-127-${{ matrix.bits }}.json
+            result-128-${{ matrix.bits }}.json
+            result-129-${{ matrix.bits }}.json
+            result-130-${{ matrix.bits }}.json
           if-no-files-found: warn
