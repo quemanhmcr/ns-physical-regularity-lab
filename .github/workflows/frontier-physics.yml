@@ -141,6 +141,7 @@ on:
       - 'experiments/146_maximally_delayed_viscous_feedback_profiles.py'
       - 'experiments/147_exact_heat_reveal_clock.py'
       - 'experiments/148_radial_hodge_viscous_transfer_spectrum.py'
+      - 'experiments/149_effective_dimension_capacitary_screen.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -1176,6 +1177,13 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/148_radial_hodge_viscous_transfer_spectrum.py | tee result-148-${{ matrix.bits }}.json
+      - name: Run effective dimension capacitary screen
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/149_effective_dimension_capacitary_screen.py | tee result-149-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -1317,4 +1325,5 @@ jobs:
             result-146-${{ matrix.bits }}.json
             result-147-${{ matrix.bits }}.json
             result-148-${{ matrix.bits }}.json
+            result-149-${{ matrix.bits }}.json
           if-no-files-found: warn
