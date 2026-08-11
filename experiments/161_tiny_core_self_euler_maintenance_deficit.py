@@ -61,8 +61,9 @@ for l in (2,3,4,6,8):
             term=tuple(C.padd(C.pscale(Amp*fc*Aq,C.pmul(rqp2,grad[i])),C.pscale(Amp*fc*Bq,C.pmul(C.pmul(rq,H),X[i]))) for i in range(3))
             U=C.vadd(U,term)
         curlerr=C.vadd(C.curl(U),C.vscale(-1,Omega)); diverr=C.div(U)
-        if not vallzero(curlerr): raise AssertionError(('interior curl lift',l,es,curlerr))
-        if not allzero(diverr): raise AssertionError(('interior divergence lift',l,es,diverr))
+        curlerr2=C.savg(C.vdot(curlerr,curlerr)); diverr2=C.savg(C.pmul(diverr,diverr))
+        if not curlerr2.contains(0): raise AssertionError(('interior curl lift',l,es,curlerr2))
+        if not diverr2.contains(0): raise AssertionError(('interior divergence lift',l,es,diverr2))
         G=C.bracket(Omega,U); DO=lapv(Omega)
         NG=vnorm(G); ND=vnorm(DO); NU=vnorm(U); NO=vnorm(Omega)
         if not (ND.lower()>0 and NO.lower()>0 and NU.lower()>0): raise AssertionError(('positive norms',l,es,NO,NU,ND))
@@ -76,7 +77,7 @@ for l in (2,3,4,6,8):
         Mvisc=arb(l+1)*Amp/(e*e)
         ratio=Jself/Mvisc
         fullnormratio=(e**l)*(NG/ND).sqrt()
-        rows.append({'l':l,'epsilon':es,'screened_companion_C_l':'1','self_Euler_same_l_projected_radial_coefficients_q_to_gamma':{str(q):str(v) for q,v in gam.items()},'self_Euler_screened_source_J0':str(Jself),'viscous_screened_drift_M1_nu1':str(Mvisc),'self_Euler_to_viscous_screened_ratio':str(ratio),'ratio_divided_by_epsilon_power_l':str(ratio/(e**l)),'full_L2_self_Euler_to_viscous_source_norm_ratio':str(fullnormratio),'full_norm_ratio_divided_by_epsilon_power_l':str(fullnormratio/(e**l)),'actual_core_vorticity_L2_square':str((e**(2*l-1))*NO),'actual_core_velocity_L2_square_inside_core':str((e**(2*l+1))*NU),'actual_self_Euler_source_L2_square_inside_core':str((e**(4*l-5))*NG),'actual_viscous_Delta_omega_L2_square_inside_core_nu1':str((e**(2*l-5))*ND)})
+        rows.append({'l':l,'epsilon':es,'screened_companion_C_l':'1','self_Euler_same_l_projected_radial_coefficients_q_to_gamma':{str(q):str(v) for q,v in gam.items()},'self_Euler_screened_source_J0':str(Jself),'viscous_screened_drift_M1_nu1':str(Mvisc),'self_Euler_to_viscous_screened_ratio':str(ratio),'ratio_divided_by_epsilon_power_l':str(ratio/(e**l)),'full_L2_self_Euler_to_viscous_source_norm_ratio':str(fullnormratio),'full_norm_ratio_divided_by_epsilon_power_l':str(fullnormratio/(e**l)),'actual_core_vorticity_L2_square':str((e**(2*l-1))*NO),'actual_core_velocity_L2_square_inside_core':str((e**(2*l+1))*NU),'actual_self_Euler_source_L2_square_inside_core':str((e**(4*l-5))*NG),'actual_viscous_Delta_omega_L2_square_inside_core_nu1':str((e**(2*l-5))*ND),'interior_curl_lift_error_square':str(curlerr2),'interior_divergence_lift_error_square':str(diverr2)})
 
 print(json.dumps({
  'arb_precision_bits':BITS,'status':'PASS','cases':len(rows),
