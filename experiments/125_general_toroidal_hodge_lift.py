@@ -86,7 +86,7 @@ for l in (2,4,6,8):
   if not raw_bd2.contains(0):raise AssertionError(('raw boundary observer excluded zero',l,qpow,raw_bd2))
   # Structural source-sphere tangency: x.grad H_l=l H_l, r=1, so the normal coefficient is l*A+B+l*C.
   # Clear the common denominator before any interval division: l[(q+l+3)-(q+2)-(l+1)]=0 exactly.
-  structural_boundary_numerator=l_int*((qpow+l_int+3)-(qpow+2)-(l_int+1))
-  if structural_boundary_numerator != 0:raise AssertionError(('structural boundary tangency',l_int,qpow,structural_boundary_numerator))
+  structural_boundary_numerator=l*((qpow+l+3)-(qpow+2)-(l+1))
+  if structural_boundary_numerator != 0:raise AssertionError(('structural boundary tangency',l,qpow,structural_boundary_numerator))
   rows.append({'l':l,'radial_power_q':qpow,'A_grad_coefficient':str(A),'B_Hx_coefficient':str(B),'C_harmonic_companion_coefficient':str(C),'vorticity_mean_square_unit_sphere':str(norm2v(V)),'curl_error':str(norm2v(diff)),'divergence_error':str(savg(pmul(dv,dv))),'structural_boundary_normal_coefficient':'0','raw_boundary_normal_error_autopsy':str(raw_bd2)})
 print(json.dumps({'arb_precision_bits':BITS,'status':'PASS','cases':len(rows),'interpretation':'For toroidal angular vorticity V=r^q x cross grad H_l with H_l harmonic homogeneous and q even, the exact tangent Hodge lift is U=A r^(q+2) grad H_l + B r^q H_l x + C grad H_l, with A=(q+l+3)/[(q+2)(q+2l+3)], B=-l/(q+2l+3), C=-(l+1)/[(q+2)(q+2l+3)].  Curl recovery, incompressibility and source-sphere tangency are certified for l=2,4,6,8 and q=0,2,4.  The harmonic companion is intrinsic to the boundary condition; the old l=2 tangent strain carrier is the first member of this family.' ,'rows':rows},indent=2,allow_nan=False))
