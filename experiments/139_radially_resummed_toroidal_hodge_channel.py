@@ -44,20 +44,22 @@ rows=[]
 for l in (2,4,6,8):
  H=re_z_power(l);g=tuple(C.pder(H,i) for i in range(3));T=C.cross(X,g)
  for pi,prof in enumerate(profiles):
-  V=({},{},{});Uhi=({},{},{});C0=z;moment=z
+  V=({},{},{});Uhi=({},{},{});C0=z;moment=z;structural_boundary=F(0)
   for q,cs in prof:
-   c=arb(cs);rq=r2pow(q//2,r2);rq2=r2pow((q+2)//2,r2)
+   cr=F(cs);c=arb(cs);rq=r2pow(q//2,r2);rq2=r2pow((q+2)//2,r2)
    V=C.vadd(V,tuple(C.pscale(c,C.pmul(rq,t)) for t in T))
    den=(q+2)*(q+2*l+3);A=c*arb(q+l+3)/den;B=-c*arb(l)/(q+2*l+3);cc=-c*arb(l+1)/den
    term=[]
    for i in range(3):term.append(C.padd(C.pscale(A,C.pmul(rq2,g[i])),C.pscale(B,C.pmul(rq,C.pmul(H,X[i])))))
    Uhi=C.vadd(Uhi,tuple(term));C0+=cc
    moment+=-arb(l+1)/arb(2*l+1)*c*(arb(1)/(q+2)-arb(1)/(q+2*l+3))
+   structural_boundary += cr*(F(l*(q+l+3),den)-F(l,q+2*l+3)-F(l*(l+1),den))
   U=C.vadd(Uhi,C.vscale(C0,g));curlerr=norm2v(C.vadd(C.curl(U),C.vscale(-1,V)));diverr=savg(C.pmul(C.div(U),C.div(U)));bd=C.vdot(X,U);bderr=savg(C.pmul(bd,bd))
   if not curlerr.contains(0):raise AssertionError(('curl',l,pi,curlerr))
   if not diverr.contains(0):raise AssertionError(('div',l,pi,diverr))
-  if not bderr.contains(0):raise AssertionError(('boundary',l,pi,bderr))
+  if structural_boundary != 0:raise AssertionError(('structural boundary',l,pi,structural_boundary))
+  if not bderr.contains(0):raise AssertionError(('raw boundary observer',l,pi,bderr))
   ratio=C0/moment if not moment.contains(0) else None
   if ratio is not None and not ratio.contains(1):raise AssertionError(('screened moment',l,pi,C0,moment,ratio))
-  rows.append({'l':l,'profile_index':pi,'radial_profile_terms':[{'q':q,'coefficient':cs} for q,cs in prof],'harmonic_companion_C_l':str(C0),'screened_radial_moment':str(moment),'C_over_screened_moment':str(ratio) if ratio is not None else None,'curl_error':str(curlerr),'divergence_error':str(diverr),'boundary_tangency_error':str(bderr),'screen_kernel_exponent_2l_plus_1':2*l+1})
+  rows.append({'l':l,'profile_index':pi,'radial_profile_terms':[{'q':q,'coefficient':cs} for q,cs in prof],'harmonic_companion_C_l':str(C0),'screened_radial_moment':str(moment),'C_over_screened_moment':str(ratio) if ratio is not None else None,'curl_error':str(curlerr),'divergence_error':str(diverr),'structural_boundary_tangency':'0','raw_boundary_tangency_error_autopsy':str(bderr),'screen_kernel_exponent_2l_plus_1':2*l+1})
 print(json.dumps({'arb_precision_bits':BITS,'status':'PASS','cases':len(rows),'interpretation':'A full toroidal angular Hodge channel omega=a(r) x cross grad H_l is radially resummed rather than treated as separate polynomial modes.  For a polynomial radial profile a(r), the exact tangent div-curl velocity equals a vortical radial part plus one harmonic companion C_l[a] grad H_l.  The companion is the screened radial moment C_l[a]=-(l+1)/(2l+1) integral_0^1 r a(r)[1-r^(2l+1)]dr.  Curl recovery, incompressibility, source-sphere tangency and the screened-moment identity are certified for mixed radial profiles and l=2,4,6,8.  At l=2 the screen is exactly 1-r^5, recovering the original Hodge transaction kernel.','rows':rows},indent=2,allow_nan=False))
