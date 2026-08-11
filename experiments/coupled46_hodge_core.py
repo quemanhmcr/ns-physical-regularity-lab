@@ -225,3 +225,22 @@ def reduced_jacobian_native(st,sym,a):
         dy=sym['S'][k]; df=[sum((J9[i][j]*dy[j] for j in range(9)),z) for i in range(9)]
         c,_=sym_coords(df,sym); cols.append(c)
     return [[cols[j][i] for j in range(5)] for i in range(5)]
+
+def degree6_velocity_parts(st,coeff):
+    c3=[];v3=[]; c5=[];v5=[]
+    for i,(c,sec) in enumerate(zip(coeff,st['S6'])):
+        if sec==('toroidal',4): c3.append(c);v3.append(st['Ulow6'][i])
+        elif sec==('toroidal',6): c5.append(c);v5.append(st['Ulow6'][i])
+    U3=C.combine(c3,v3) if c3 else ({},{},{})
+    U5=C.combine(c5,v5) if c5 else ({},{},{})
+    U7=C.combine(coeff,st['Uhigh6'])
+    return U3,U5,U7
+
+def higher_responses_from_coupled(st,fb):
+    V4=fb['V4'];V6=fb['V6'];U34=fb['U34'];U54=fb['U54'];U36,U56,U76=degree6_velocity_parts(st,fb['coeff6'])
+    U3tot=C.vadd(st['u3'],C.vadd(U34,U36));U5tot=C.vadd(U54,U56)
+    R8=C.vadd(C.bracket(st['omega'],U76),C.bracket(V4,U5tot));R8=C.vadd(R8,C.bracket(V6,U3tot))
+    R10=C.vadd(C.bracket(V4,U76),C.bracket(V6,U5tot))
+    R12=C.bracket(V6,U76)
+    P8,N8=C.sharp_split(R8,8,st['X'],st['r2']);P10,N10=C.sharp_split(R10,10,st['X'],st['r2']);P12,N12=C.sharp_split(R12,12,st['X'],st['r2'])
+    return {8:(R8,P8,N8),10:(R10,P10,N10),12:(R12,P12,N12),'U3_6':U36,'U5_6':U56,'U7_6':U76}

@@ -129,6 +129,7 @@ on:
       - 'experiments/134_five_dim_feedback_krawczyk_attack.py'
       - 'experiments/135_native_arb_hodge_krawczyk_certificate.py'
       - 'experiments/136_krawczyk_radius_window.py'
+      - 'experiments/137_certified_coupled_higher_response.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -183,6 +184,7 @@ on:
       - 'theory/62_five_dim_feedback_interval_certificate.md'
       - 'theory/63_native_arb_fixed_hodge_inverse.md'
       - 'theory/64_krawczyk_radius_window.md'
+      - 'theory/65_coupled46_servo_and_higher_emission.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -1070,6 +1072,13 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/136_krawczyk_radius_window.py | tee result-136-${{ matrix.bits }}.json
+      - name: Run certified coupled higher-response emission
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/137_certified_coupled_higher_response.py | tee result-137-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -1199,4 +1208,5 @@ jobs:
             result-134-${{ matrix.bits }}.json
             result-135-${{ matrix.bits }}.json
             result-136-${{ matrix.bits }}.json
+            result-137-${{ matrix.bits }}.json
           if-no-files-found: warn
