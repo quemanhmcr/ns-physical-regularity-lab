@@ -166,6 +166,8 @@ on:
       - 'experiments/171_null_catalyst_euler_flux_preservation.py'
       - 'experiments/172_localized_null_catalyst_turnover_collar.py'
       - 'experiments/173_critical_null_catalyst_scalar_escape.py'
+      - 'experiments/174_null_catalyst_moving_cap_recruitment.py'
+      - 'experiments/175_turnover_cap_kelvin_ancestry_clock.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -1376,6 +1378,20 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/173_critical_null_catalyst_scalar_escape.py | tee result-173-${{ matrix.bits }}.json
+      - name: Run null catalyst moving cap recruitment
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/174_null_catalyst_moving_cap_recruitment.py | tee result-174-${{ matrix.bits }}.json
+      - name: Run turnover cap Kelvin ancestry clock
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/175_turnover_cap_kelvin_ancestry_clock.py | tee result-175-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -1542,4 +1558,6 @@ jobs:
             result-171-${{ matrix.bits }}.json
             result-172-${{ matrix.bits }}.json
             result-173-${{ matrix.bits }}.json
+            result-174-${{ matrix.bits }}.json
+            result-175-${{ matrix.bits }}.json
           if-no-files-found: warn
