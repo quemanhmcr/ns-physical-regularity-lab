@@ -105,8 +105,13 @@ def feedback_jacobian(st,y):
 def pswap_xy(P):
     return {(e[1],e[0],e[2]):v for e,v in P.items()}
 
-def vswap_xy(V):
+def vpolar_swap_xy(V):
+    # Polar-vector action of the improper orthogonal reflection x<->y.
     return (pswap_xy(V[1]),pswap_xy(V[0]),pswap_xy(V[2]))
+
+def vaxial_swap_xy(V):
+    # Vorticity is axial: det(R) R with det(R)=-1 for x<->y.
+    return vscale(-1,vpolar_swap_xy(V))
 
 def feedback_symmetry_basis(st):
     """Return the physical x<->y fixed/anti-fixed decomposition of the 9D degree-six T4 feedback sector."""
@@ -116,7 +121,7 @@ def feedback_symmetry_basis(st):
     A=[[cols[j][piv[i]] for j in range(9)] for i in range(9)]
     swapcols=[]
     for V in Y:
-        b=C.flatten(vswap_xy(V),6); c=C.solve(A,[b[p] for p in piv]); swapcols.append(c)
+        b=C.flatten(vaxial_swap_xy(V),6); c=C.solve(A,[b[p] for p in piv]); swapcols.append(c)
     sym=[]; anti=[]
     for j,c in enumerate(swapcols):
         ej=[z]*9; ej[j]=o
