@@ -143,6 +143,7 @@ on:
       - 'experiments/148_radial_hodge_viscous_transfer_spectrum.py'
       - 'experiments/149_effective_dimension_capacitary_screen.py'
       - 'experiments/150_signed_viscous_spectral_delay_packet.py'
+      - 'experiments/151_finite_enstrophy_hankel_delay_construction.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -1192,6 +1193,13 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/150_signed_viscous_spectral_delay_packet.py | tee result-150-${{ matrix.bits }}.json
+      - name: Run finite enstrophy Hankel delay construction
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/151_finite_enstrophy_hankel_delay_construction.py | tee result-151-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -1335,4 +1343,5 @@ jobs:
             result-148-${{ matrix.bits }}.json
             result-149-${{ matrix.bits }}.json
             result-150-${{ matrix.bits }}.json
+            result-151-${{ matrix.bits }}.json
           if-no-files-found: warn
