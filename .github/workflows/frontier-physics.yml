@@ -171,6 +171,8 @@ on:
       - 'experiments/176_critical_null_catalyst_forced_recruitment.py'
       - 'experiments/177_exact_ns_infinite_recross_frozen_ancestry.py'
       - 'experiments/178_linear_null_cap_no_multiplicity.py'
+      - 'experiments/179_vorticity_zero_gradient_spectral_ancestry.py'
+      - 'experiments/180_null_catalyst_forced_viscous_subscale.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -1416,6 +1418,20 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/178_linear_null_cap_no_multiplicity.py | tee result-178-${{ matrix.bits }}.json
+      - name: Run vorticity zero gradient spectral ancestry
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/179_vorticity_zero_gradient_spectral_ancestry.py | tee result-179-${{ matrix.bits }}.json
+      - name: Run null catalyst forced viscous subscale
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/180_null_catalyst_forced_viscous_subscale.py | tee result-180-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -1587,4 +1603,6 @@ jobs:
             result-176-${{ matrix.bits }}.json
             result-177-${{ matrix.bits }}.json
             result-178-${{ matrix.bits }}.json
+            result-179-${{ matrix.bits }}.json
+            result-180-${{ matrix.bits }}.json
           if-no-files-found: warn
