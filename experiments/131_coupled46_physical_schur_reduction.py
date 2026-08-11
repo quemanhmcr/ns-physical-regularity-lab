@@ -23,7 +23,10 @@ if rW!=49: raise AssertionError(('silent K66 rank',rW))
 # Sequential degree-six calibration supplies the natural first guess y_seq.
 seq=C.solve_degree6_servo()
 yseq=[seq['coeff'][i] for i in st['t4idx']]
-fb=H.feedback_map(st,yseq)
+# Diagnostic observer: pin to the midpoint of the sequential enclosure before nested inversions.
+# Rank/structural reduction statements above do not depend on this midpoint calibration.
+yobs=[C.arb(v.mid()) for v in yseq]
+fb=H.feedback_map(st,yobs)
 Ffield=C.combine(fb['F'],[st['V6b'][i] for i in st['t4idx']])
 # Degree-four is exactly restored by construction for every y.
 F4=C.vadd(st['N4'],C.vadd(C.combine(fb['c4'],st['K44']),fb['B4']))
@@ -37,9 +40,9 @@ out={
  'K46_rank_on_T4_feedback_sector':r46,
  'K46_silent_complement_structural_zero':all(C.norm2v(v).contains(0) for v in silent_back),
  'K66_rank_on_lower_silent_complement':rW,
- 'sequential_guess_T4_feedback_mean_square':str(C.norm2v(C.combine(yseq,[st['V6b'][i] for i in st['t4idx']]))),
- 'Schur_feedback_mismatch_at_sequential_guess_mean_square':str(C.norm2v(Ffield)),
- 'degree4_residual_after_exact_elimination':str(C.norm2v(F4)),
- 'degree6_linear_inverse_residual':str(C.norm2v(fb['res6'])),
+ 'sequential_guess_T4_feedback_mean_square':str(C.norm2v(C.combine(yobs,[st['V6b'][i] for i in st['t4idx']]))),
+ 'Schur_feedback_mismatch_at_sequential_midpoint_mean_square':str(C.norm2v(Ffield)),
+ 'degree4_residual_after_midpoint_observer_elimination':str(C.norm2v(F4)),
+ 'degree6_linear_inverse_residual_at_midpoint_observer':str(C.norm2v(fb['res6'])),
  'interpretation':'The apparent coupled 30+58 degree-four/degree-six maintenance problem collapses to a nine-dimensional physical feedback law because only the degree-six toroidal l=4 sector carries a degree-three harmonic Hodge companion and can therefore backreact onto degree four.  The remaining 49-dimensional sector P1+P3+P5+P7+T6 is exactly lower-silent and has rank 49 under the diagonal K66 response.  Since K44 and K66 are invertible, degree four and the 49 silent degree-six amplitudes can be eliminated uniquely for each nine-component T4 feedback y.  Coupled compatibility is therefore the intrinsic fixed-point equation y=Pi_T4 K66^{-1}[-R6(V4(y),y)], not an arbitrary 88-variable truncation.'}
 print(json.dumps(out,indent=2,allow_nan=False))

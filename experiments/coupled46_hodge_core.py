@@ -82,3 +82,22 @@ def feedback_map(st,y):
     F=[phi[j]-y[j] for j in range(9)]
     W=C.combine([coeff[i] for i in st['silent']],[st['V6b'][i] for i in st['silent']])
     return dict(phi=phi,F=F,coeff6=coeff,V6=V6,W=W,R6=R,res6=res,**q)
+
+def feedback_jacobian(st,y):
+    """Exact directional Jacobian of F(y)=Pi_T4 K66^{-1}[-R6(V4(y),y)]-y."""
+    q=v4_for_y(st,y); V4=q['V4']; U34=q['U34']; U3y=q['U3y']
+    cols=[]
+    for a,idx in enumerate(st['t4idx']):
+        # dV4/dy_a is fixed by exact lower-level compensation K44 dV4 = -K46 e_a.
+        _,dV4,dU3,dU5,_=solve44_field(st,C.vscale(-1,st['K46'][idx]))
+        dU3y=st['Ulow6'][idx]
+        dR=C.vadd(C.bracket(dV4,st['u3']),C.bracket(st['omega'],dU5))
+        dR=C.vadd(dR,C.bracket(dV4,q['U34']))
+        dR=C.vadd(dR,C.bracket(V4,dU3))
+        dR=C.vadd(dR,C.bracket(dV4,U3y))
+        dR=C.vadd(dR,C.bracket(V4,dU3y))
+        dR=C.sharp_split(dR,6,st['X'],st['r2'])[1]
+        dc,_,_=solve66_field(st,C.vscale(-1,dR))
+        cols.append([dc[j]-(o if i==a else z) for i,j in enumerate(st['t4idx'])])
+    # Return row-major 9x9 Jacobian.
+    return [[cols[j][i] for j in range(9)] for i in range(9)]
