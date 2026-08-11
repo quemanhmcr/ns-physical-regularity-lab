@@ -177,6 +177,7 @@ on:
       - 'experiments/182_zero_switching_curvature_degeneracy_gate.py'
       - 'experiments/183_euler_zero_germ_cauchy_similarity.py'
       - 'experiments/184_zero_manifold_harmonic_folding_source.py'
+      - 'experiments/185_harmonic_folding_source_radius_occupancy.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -1464,6 +1465,13 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/184_zero_manifold_harmonic_folding_source.py | tee result-184-${{ matrix.bits }}.json
+      - name: Run harmonic folding source radius occupancy gate
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/185_harmonic_folding_source_radius_occupancy.py | tee result-185-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -1641,4 +1649,5 @@ jobs:
             result-182-${{ matrix.bits }}.json
             result-183-${{ matrix.bits }}.json
             result-184-${{ matrix.bits }}.json
+            result-185-${{ matrix.bits }}.json
           if-no-files-found: warn
