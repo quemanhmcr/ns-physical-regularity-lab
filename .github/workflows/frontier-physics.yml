@@ -175,6 +175,8 @@ on:
       - 'experiments/180_null_catalyst_forced_viscous_subscale.py'
       - 'experiments/181_simple_vorticity_zero_viscous_genealogy.py'
       - 'experiments/182_zero_switching_curvature_degeneracy_gate.py'
+      - 'experiments/183_euler_zero_germ_cauchy_similarity.py'
+      - 'experiments/184_zero_manifold_harmonic_folding_source.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -1448,6 +1450,20 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/182_zero_switching_curvature_degeneracy_gate.py | tee result-182-${{ matrix.bits }}.json
+      - name: Run Euler zero germ Cauchy similarity
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/183_euler_zero_germ_cauchy_similarity.py | tee result-183-${{ matrix.bits }}.json
+      - name: Run zero manifold harmonic folding source
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/184_zero_manifold_harmonic_folding_source.py | tee result-184-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -1623,4 +1639,6 @@ jobs:
             result-180-${{ matrix.bits }}.json
             result-181-${{ matrix.bits }}.json
             result-182-${{ matrix.bits }}.json
+            result-183-${{ matrix.bits }}.json
+            result-184-${{ matrix.bits }}.json
           if-no-files-found: warn
