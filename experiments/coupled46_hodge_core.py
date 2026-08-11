@@ -141,3 +141,25 @@ def sym_coords(y,sym):
     a=C.solve(sym['Smat'],[y[p] for p in sym['spiv']])
     recon=y_from_sym(a,sym)
     return a,recon
+
+def reduced_feedback(st,sym,a):
+    y=y_from_sym(a,sym); fb=feedback_map(st,y); g,recon=sym_coords(fb['F'],sym)
+    return g,fb,recon
+
+def reduced_jacobian(st,sym,a):
+    y=y_from_sym(a,sym); J9=feedback_jacobian(st,y)
+    cols=[]
+    for k in range(5):
+        dy=sym['S'][k]
+        df=[sum((J9[i][j]*dy[j] for j in range(9)),z) for i in range(9)]
+        c,_=sym_coords(df,sym); cols.append(c)
+    return [[cols[j][i] for j in range(5)] for i in range(5)]
+
+def matvec(A,x):
+    return [sum((A[i][j]*x[j] for j in range(len(x))),z) for i in range(len(A))]
+
+def matmul(A,B):
+    return [[sum((A[i][k]*B[k][j] for k in range(len(B))),z) for j in range(len(B[0]))] for i in range(len(A))]
+
+def eye(n):
+    return [[o if i==j else z for j in range(n)] for i in range(n)]

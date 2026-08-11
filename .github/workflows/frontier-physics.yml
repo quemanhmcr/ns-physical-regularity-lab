@@ -126,6 +126,7 @@ on:
       - 'experiments/131_coupled46_physical_schur_reduction.py'
       - 'experiments/132_coupled46_feedback_newton_search.py'
       - 'experiments/133_feedback_swap_symmetry_reduction.py'
+      - 'experiments/134_five_dim_feedback_krawczyk_attack.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -177,6 +178,7 @@ on:
       - 'theory/59_coupled46_physical_schur_reduction.md'
       - 'theory/60_coupled46_feedback_newton_search.md'
       - 'theory/61_feedback_swap_symmetry.md'
+      - 'theory/62_five_dim_feedback_interval_certificate.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -1043,6 +1045,13 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/133_feedback_swap_symmetry_reduction.py | tee result-133-${{ matrix.bits }}.json
+      - name: Run five-dimensional coupled feedback Krawczyk attack
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/134_five_dim_feedback_krawczyk_attack.py | tee result-134-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -1169,4 +1178,5 @@ jobs:
             result-131-${{ matrix.bits }}.json
             result-132-${{ matrix.bits }}.json
             result-133-${{ matrix.bits }}.json
+            result-134-${{ matrix.bits }}.json
           if-no-files-found: warn
