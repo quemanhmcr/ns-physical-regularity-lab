@@ -179,6 +179,7 @@ on:
       - 'experiments/184_zero_manifold_harmonic_folding_source.py'
       - 'experiments/185_harmonic_folding_source_radius_occupancy.py'
       - 'experiments/186_harmonic_folding_shell_circulation_clock.py'
+      - 'experiments/187_harmonic_folding_remote_source_persistence_gate.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -1480,6 +1481,13 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/186_harmonic_folding_shell_circulation_clock.py | tee result-186-${{ matrix.bits }}.json
+      - name: Run harmonic folding remote source persistence gate
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/187_harmonic_folding_remote_source_persistence_gate.py | tee result-187-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -1659,4 +1667,5 @@ jobs:
             result-184-${{ matrix.bits }}.json
             result-185-${{ matrix.bits }}.json
             result-186-${{ matrix.bits }}.json
+            result-187-${{ matrix.bits }}.json
           if-no-files-found: warn
