@@ -26,17 +26,22 @@ def a1(c): return sum(c,Q(0))
 def Z(l,c): return sum((c[i]*c[j]*Q(1,2*l+2*i+2*j+3) for i in range(len(c)) for j in range(len(c))),Q(0))
 def A(q): return arb(q.numerator)/q.denominator
 
+def fac(l,k,j):
+    q=Q(1)
+    for s in range(j):
+        p=k-s; q*=Dlam(l,p)
+    return q
+
 def delayed(l,n):
-    # Unique degree-2n polynomial with top coefficient 1 and C[D^q a]=0 for q<n.
+    # Exact constructor already validated in module 146.
     c=[Q(0)]*(n+1); c[n]=Q(1)
-    for q in range(n-2,-1,-1):
-        # At level q, only coefficients k>=q+1 survive after D^q.
-        tail=sum((c[k]*C(l,Dq(l,[Q(0)]*k+[Q(1)],q)) for k in range(q+2,n+1)),Q(0))
-        basis=C(l,Dq(l,[Q(0)]*(q+1)+[Q(1)],q))
-        c[q+1]=-tail/basis
-    tail=sum((c[k]*Ccoef(l,k) for k in range(1,n+1)),Q(0))
-    c[0]=-tail/Ccoef(l,0)
+    for j in range(n-2,-1,-1):
+        denom=fac(l,j+1,j)
+        rest=sum((c[k]*fac(l,k,j) for k in range(j+2,n+1)),Q(0))
+        c[j+1]=-rest/denom
+    c[0]=-sum((c[k]*Ccoef(l,k) for k in range(1,n+1)),Q(0))/Ccoef(l,0)
     return c
+
 
 rows=[]
 profiles=[
