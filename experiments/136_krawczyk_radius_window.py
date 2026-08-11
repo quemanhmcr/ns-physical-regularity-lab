@@ -16,7 +16,7 @@ for j in range(5):
  e=[C.z]*5;e[j]=C.o;Bcols.append(H.arbmat_solve(J0,e))
 B=[[Bcols[j][i] for j in range(5)] for i in range(5)]; Bg=H.matvec(B,g0); center=[a[i]-Bg[i] for i in range(5)]; I=H.eye(5)
 rows=[]; successful=[]
-for rad_s in ['1e-3','1e-4','1e-5','3e-6','1e-6','3e-7','1e-7','1e-8','1e-9','1e-10']:
+for rad_s in ['1e-3','1e-4','1e-5','3e-6','1e-6','3e-7','1e-7','1e-8','1e-9','1e-10','1e-15','1e-20','1e-30','1e-40','1e-50']:
  R=arb('0 +/- '+rad_s); X=[arb(v.mid())+R for v in a]; D=[arb('0 +/- '+rad_s) for _ in range(5)]
  JX=H.reduced_jacobian_native(st,sym,X); M=H.matmul(B,JX); E=[[I[i][j]-M[i][j] for j in range(5)] for i in range(5)]; K=[center[i]+v for i,v in enumerate(H.matvec(E,D))]
  inc=[]; ratios=[]
