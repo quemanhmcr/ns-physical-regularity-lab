@@ -111,7 +111,7 @@ def vpolar_swap_xy(V):
 
 def vaxial_swap_xy(V):
     # Vorticity is axial: det(R) R with det(R)=-1 for x<->y.
-    return vscale(-1,vpolar_swap_xy(V))
+    return C.vscale(-1,vpolar_swap_xy(V))
 
 def feedback_symmetry_basis(st):
     """Return the physical x<->y fixed/anti-fixed decomposition of the 9D degree-six T4 feedback sector."""
