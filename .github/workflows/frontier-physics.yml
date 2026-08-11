@@ -152,6 +152,7 @@ on:
       - 'experiments/157_screened_feedback_continuous_maintenance_ledger.py'
       - 'experiments/158_stationary_affine_viscous_spectral_horizon.py'
       - 'experiments/159_physical_tiny_core_screened_collar.py'
+      - 'experiments/160_actual_affine_euler_screened_source_gate.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -1264,6 +1265,13 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/159_physical_tiny_core_screened_collar.py | tee result-159-${{ matrix.bits }}.json
+      - name: Run actual affine Euler screened source gate
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/160_actual_affine_euler_screened_source_gate.py | tee result-160-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -1416,4 +1424,5 @@ jobs:
             result-157-${{ matrix.bits }}.json
             result-158-${{ matrix.bits }}.json
             result-159-${{ matrix.bits }}.json
+            result-160-${{ matrix.bits }}.json
           if-no-files-found: warn
