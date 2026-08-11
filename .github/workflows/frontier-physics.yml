@@ -131,6 +131,7 @@ on:
       - 'experiments/136_krawczyk_radius_window.py'
       - 'experiments/137_certified_coupled_higher_response.py'
       - 'experiments/138_certified_higher_response_hodge_spectrum.py'
+      - 'experiments/139_radially_resummed_toroidal_hodge_channel.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -187,6 +188,7 @@ on:
       - 'theory/64_krawczyk_radius_window.md'
       - 'theory/65_coupled46_servo_and_higher_emission.md'
       - 'theory/66_certified_higher_hodge_spectrum.md'
+      - 'theory/67_radially_resummed_hodge_channels.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -1088,6 +1090,13 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/138_certified_higher_response_hodge_spectrum.py | tee result-138-${{ matrix.bits }}.json
+      - name: Run radially resummed toroidal Hodge channel
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/139_radially_resummed_toroidal_hodge_channel.py | tee result-139-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -1219,4 +1228,5 @@ jobs:
             result-136-${{ matrix.bits }}.json
             result-137-${{ matrix.bits }}.json
             result-138-${{ matrix.bits }}.json
+            result-139-${{ matrix.bits }}.json
           if-no-files-found: warn
