@@ -1,5 +1,5 @@
 import degree6_hodge_servo_core as C
-from flint import arb
+from flint import arb, arb_mat
 
 z=C.z; o=C.o
 
@@ -163,3 +163,65 @@ def matmul(A,B):
 
 def eye(n):
     return [[o if i==j else z for j in range(n)] for i in range(n)]
+
+
+def arbmat_solve(A,b):
+    """Rigorous native Arb solve for a fixed physical response matrix."""
+    M=arb_mat(A); rhs=arb_mat([[v] for v in b]); x=M.solve(rhs)
+    return [x[i,0] for i in range(len(b))]
+
+def solve44_field_native(st,target):
+    b=C.flatten(target,4); x=arbmat_solve(st['A44'],[b[p] for p in st['piv44']])
+    V=C.combine(x,st['V4b']); U3=C.combine(x,st['U34']); U5=C.combine(x,st['U54'])
+    res=C.vadd(C.combine(x,st['K44']),C.vscale(-1,target))
+    return x,V,U3,U5,res
+
+def solve66_field_native(st,target):
+    b=C.flatten(target,6); x=arbmat_solve(st['A66'],[b[p] for p in st['piv66']])
+    V=C.combine(x,st['V6b']); res=C.vadd(C.combine(x,st['K66']),C.vscale(-1,target))
+    return x,V,res
+
+def v4_for_y_native(st,y):
+    V6y=C.combine(y,[st['V6b'][i] for i in st['t4idx']])
+    U3y=C.combine(y,[st['Ulow6'][i] for i in st['t4idx']])
+    B4=C.combine(y,[st['K46'][i] for i in st['t4idx']])
+    rhs=C.vscale(-1,C.vadd(st['N4'],B4))
+    c4,V4,U34,U54,res=solve44_field_native(st,rhs)
+    return dict(V6y=V6y,U3y=U3y,B4=B4,c4=c4,V4=V4,U34=U34,U54=U54,res4=res)
+
+def nonlinear_degree6_source_native(st,y):
+    q=v4_for_y_native(st,y); V4=q['V4']; U34=q['U34']; U54=q['U54']; U3y=q['U3y']
+    R=C.vadd(C.bracket(V4,st['u3']),C.bracket(st['omega'],U54))
+    R=C.vadd(R,C.bracket(V4,U34)); R=C.vadd(R,C.bracket(V4,U3y))
+    return C.sharp_split(R,6,st['X'],st['r2'])[1],q
+
+def feedback_map_native(st,y):
+    R,q=nonlinear_degree6_source_native(st,y)
+    coeff,V6,res=solve66_field_native(st,C.vscale(-1,R))
+    phi=[coeff[i] for i in st['t4idx']]; F=[phi[j]-y[j] for j in range(9)]
+    W=C.combine([coeff[i] for i in st['silent']],[st['V6b'][i] for i in st['silent']])
+    return dict(phi=phi,F=F,coeff6=coeff,V6=V6,W=W,R6=R,res6=res,**q)
+
+def feedback_jacobian_native(st,y):
+    q=v4_for_y_native(st,y); V4=q['V4']; U34=q['U34']; U3y=q['U3y']; cols=[]
+    for a,idx in enumerate(st['t4idx']):
+        _,dV4,dU3,dU5,_=solve44_field_native(st,C.vscale(-1,st['K46'][idx]))
+        dU3y=st['Ulow6'][idx]
+        dR=C.vadd(C.bracket(dV4,st['u3']),C.bracket(st['omega'],dU5))
+        dR=C.vadd(dR,C.bracket(dV4,q['U34'])); dR=C.vadd(dR,C.bracket(V4,dU3))
+        dR=C.vadd(dR,C.bracket(dV4,U3y)); dR=C.vadd(dR,C.bracket(V4,dU3y))
+        dR=C.sharp_split(dR,6,st['X'],st['r2'])[1]
+        dc,_,_=solve66_field_native(st,C.vscale(-1,dR))
+        cols.append([dc[j]-(o if i==a else z) for i,j in enumerate(st['t4idx'])])
+    return [[cols[j][i] for j in range(9)] for i in range(9)]
+
+def reduced_feedback_native(st,sym,a):
+    y=y_from_sym(a,sym); fb=feedback_map_native(st,y); g,recon=sym_coords(fb['F'],sym)
+    return g,fb,recon
+
+def reduced_jacobian_native(st,sym,a):
+    y=y_from_sym(a,sym); J9=feedback_jacobian_native(st,y); cols=[]
+    for k in range(5):
+        dy=sym['S'][k]; df=[sum((J9[i][j]*dy[j] for j in range(9)),z) for i in range(9)]
+        c,_=sym_coords(df,sym); cols.append(c)
+    return [[cols[j][i] for j in range(5)] for i in range(5)]

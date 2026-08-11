@@ -127,6 +127,7 @@ on:
       - 'experiments/132_coupled46_feedback_newton_search.py'
       - 'experiments/133_feedback_swap_symmetry_reduction.py'
       - 'experiments/134_five_dim_feedback_krawczyk_attack.py'
+      - 'experiments/135_native_arb_hodge_krawczyk_certificate.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -179,6 +180,7 @@ on:
       - 'theory/60_coupled46_feedback_newton_search.md'
       - 'theory/61_feedback_swap_symmetry.md'
       - 'theory/62_five_dim_feedback_interval_certificate.md'
+      - 'theory/63_native_arb_fixed_hodge_inverse.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -1052,6 +1054,13 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/134_five_dim_feedback_krawczyk_attack.py | tee result-134-${{ matrix.bits }}.json
+      - name: Run native-Arb fixed-Hodge Krawczyk certificate
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/135_native_arb_hodge_krawczyk_certificate.py | tee result-135-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -1179,4 +1188,5 @@ jobs:
             result-132-${{ matrix.bits }}.json
             result-133-${{ matrix.bits }}.json
             result-134-${{ matrix.bits }}.json
+            result-135-${{ matrix.bits }}.json
           if-no-files-found: warn
