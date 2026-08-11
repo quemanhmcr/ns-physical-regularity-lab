@@ -31,9 +31,13 @@ For such bends,
 
 `K2=int kappa^2 ds=N pi/R_c`.
 
-The directional viscous curvature term is therefore
+Theory18 gives the rigorous directional lower bound
 
-`Tax_dir=nu Gamma K2`.
+`Tax_dir >= B_kappa`,
+
+`B_kappa = nu Gamma K2`.
+
+Only the **RHS floor** `B_kappa` is audited below.  Equality with the full direction-gradient dissipation is not assumed.
 
 For a circulation-isolation collar `b=beta a` carrying at least fraction `theta` of `Gamma`, the tubular Cauchy floor is
 
@@ -41,9 +45,11 @@ For a circulation-isolation collar `b=beta a` carrying at least fraction `theta`
 
 provided `b<R_c`.
 
-The relevant persistence observer is not raw `K2`, which can diverge on a shrinking object, but its length-averaged diffusion exposure over one maintenance time `tau=1/s`:
+A useful observer for whether this *particular centerline-curvature floor* becomes coercive is its length-normalized exposure over one maintenance time `tau=1/s`:
 
-`Xi = nu tau K2/L_bend = nu tau/R_c^2`.
+`Xi_kappa = nu tau K2/L_bend = nu tau/R_c^2`.
+
+`Xi_kappa` is not the full `nu tau |grad xi|^2` exposure; additional direction gradients can only increase the actual tax.
 
 ## ATTACK A — near-contact hairpins
 
@@ -53,17 +59,17 @@ Take
 
 Then exactly
 
-`Xi_near = 1/(chi^2 Cw Re_Gamma)`.
+`Xi_kappa,near = 1/(chi^2 Cw Re_Gamma)`.
 
-The scale disappears.  A fixed high circulation Reynolds number keeps the tight return bends on the same favorable side of diffusion at every shrinking stage.
+The scale disappears.  Thus the **known curvature floor** does not become more coercive inward at fixed high circulation Reynolds number.  This does not prove the tight bends dynamically survive; unmeasured direction gradients or mutual induction can still kill them.
 
 The geometric inventories are
 
 `L_bend,near ~ epsilon^(3/5)`,
 
-`Tax_dir tau ~ epsilon^(3/5)`.
+`B_kappa tau ~ epsilon^(3/5)`.
 
-Thus total curvature-square diverges, but the curvature tax accumulated on the shrinking maintenance clock vanishes.
+Thus total centerline curvature-square diverges, but its rigorous lower-bound RHS accumulated on the shrinking maintenance clock vanishes.  A vanishing lower bound cannot certify a cheap actual solution; it only fails to obstruct one.
 
 ## ATTACK B — remote returns
 
@@ -73,15 +79,15 @@ Take
 
 Then
 
-`Xi_remote = epsilon^(2/5)/(mu eta^2 K^2) ->0`,
+`Xi_kappa,remote = epsilon^(2/5)/(mu eta^2 K^2) ->0`,
 
 while
 
 `L_bend,remote ~ epsilon^(2/5)`,
 
-`Tax_dir tau ~ epsilon^(4/5)`.
+`B_kappa tau ~ epsilon^(4/5)`.
 
-Remote return geometry is even less exposed to curvature diffusion on the maintenance clock.
+So the centerline-curvature floor becomes still less coercive inward for remote returns; again this is not an upper bound on actual viscous or collective cost.
 
 ## AUTOPSY
 
@@ -91,15 +97,15 @@ A tempting closure repair was:
 
 That implication is false at the critical exponents currently forced by the source ledger.
 
-Near-contact returns have a fixed high-Re persistence buffer.  Remote returns have a buffer that improves inward.  The local circulation-collar floor remains positive, but its physical support length shrinks fast enough that it does not create a non-summable circulation packet toll.
+Near-contact returns keep the *known centerline-curvature floor* at a fixed high-Re scale.  The remote version weakens inward.  The local circulation-collar floor remains positive, but these two lower bounds together do not create a non-summable circulation packet toll.
 
 ## KILL / SURVIVE
 
 KILL, at this scope:
 
-1. closure curvature alone repairs the distinct-packet theorem;
-2. a fixed-aspect local circulation collar plus curvature produces a scale-divergent one-event ancestry cost;
-3. choosing between near-contact and remote return geometries forces a scalar contradiction.
+1. the theory18 centerline-curvature lower bound alone repairs the distinct-packet theorem;
+2. that lower bound combined with the declared fixed-aspect circulation-collar lower bound produces a scale-divergent one-event ancestry toll;
+3. the existing lower-bound ledger forces a contradiction merely by choosing between near-contact and remote returns.
 
 SURVIVES:
 
