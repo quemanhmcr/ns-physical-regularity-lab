@@ -34,7 +34,8 @@ def spectrum(V,d,X,r2):
 st=H.prepare();sym=H.feedback_symmetry_basis(st);seq=C.solve_degree6_servo();y=[arb(seq['coeff'][i].mid()) for i in st['t4idx']];a,_=H.sym_coords(y,sym);a=[arb(v.mid()) for v in a]
 for _ in range(8):
  g,_,_=H.reduced_feedback_native(st,sym,a);Jr=H.reduced_jacobian_native(st,sym,a);J=[[arb(Jr[i][j].mid()) for j in range(5)] for i in range(5)];dd=H.arbmat_solve(J,[-arb(v.mid()) for v in g]);a=[arb((a[i]+dd[i]).mid()) for i in range(5)]
-R=arb('0 +/- 1e-20');box=[arb(v.mid())+R for v in a];_,fb,_=H.reduced_feedback_native(st,sym,box);hr=H.higher_responses_from_coupled(st,fb);rows=[]
+rad_s='1e-20' if BITS==160 else ('1e-30' if BITS==256 else '1e-50')
+R=arb('0 +/- '+rad_s);box=[arb(v.mid())+R for v in a];_,fb,_=H.reduced_feedback_native(st,sym,box);hr=H.higher_responses_from_coupled(st,fb);rows=[]
 for d in (8,10,12):
  N=hr[d][2];rad,pol,tor=spectrum(N,d,st['X'],st['r2']); row={'degree':d,'radial_null_mean_square':str(rad),'positive_poloidal_sectors':[],'positive_toroidal_sectors':[]}
  for l,e in pol.items():
@@ -45,4 +46,4 @@ for d in (8,10,12):
   if e>0:row['positive_toroidal_sectors'].append(l)
  if 2 in tor and not tor[2].contains(0):raise AssertionError(('productive T2 leaked into null spectrum',d,tor[2]))
  rows.append(row)
-print(json.dumps({'arb_precision_bits':BITS,'status':'PASS','certified_root_box_radius':'1e-20','interpretation':'Resolve the unavoidable higher transaction-null emissions of the certified coupled degree-four/six servo using only intrinsic surface operators: radial/tangential split, surface divergence, surface curl, and the sphere Laplacian.  No preselected truncated modal ansatz is used; the allowed Hodge sectors are the complete sectors compatible with each physical homogeneity.  Positive lower bounds identify angular channels that are necessarily present at the actual coupled root.','rows':rows},indent=2,allow_nan=False))
+print(json.dumps({'arb_precision_bits':BITS,'status':'PASS','certified_root_box_radius':rad_s,'interpretation':'Resolve the unavoidable higher transaction-null emissions of the certified coupled degree-four/six servo using only intrinsic surface operators: radial/tangential split, surface divergence, surface curl, and the sphere Laplacian.  No preselected truncated modal ansatz is used; the allowed Hodge sectors are the complete sectors compatible with each physical homogeneity.  Positive lower bounds identify angular channels that are necessarily present at the actual coupled root.','rows':rows},indent=2,allow_nan=False))
