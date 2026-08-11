@@ -3,7 +3,7 @@ from flint import arb, ctx
 BITS=int(os.environ.get('ARB_PREC_BITS','160'))
 if BITS < 160: raise SystemExit('ARB_PREC_BITS must be at least 160')
 ctx.prec=BITS
-pi=arb.pi(); rows=[]
+pi=arb.pi(); one=arb(1); rows=[]; skipped_nonmultipass=0
 # epsilon=rho^5; source R=K rho^4; maintenance s=mu nu/rho^10.
 # Fixed lineage Gamma=ReG nu and winding law s=Cw Gamma N/R^2.
 # Saturated passage packing gives a=R/sqrt(N)=sqrt(Cw ReG/mu) rho^5.
@@ -31,6 +31,11 @@ for rs in ('0.1','1e-3','1e-6'):
       nu=arb(nus); Gamma=ReG*nu
       s=mu*nu/(eps*eps); tau=1/s
       N=s*R*R/(Cw*Gamma)
+      # A return geometry is meaningful only in the multi-pass branch.
+      # The original run 31477455263 incorrectly included coarse cases N<1.
+      if not (N-one).lower()>0:
+       skipped_nonmultipass += 1
+       continue
       a=R/N.sqrt()
       # Two geometric closure extremes. beta<chi for the near tubular Jacobian.
       for kind,fac_s,beta_s,theta_s in (
@@ -85,6 +90,7 @@ for rs in ('0.1','1e-3','1e-6'):
         'all_closed_identity_ratios':{k:str(v) for k,v in checks.items()}})
 print(json.dumps({
  'arb_precision_bits':BITS,'status':'PASS','cases':len(rows),
+ 'skipped_nonmultipass_parameter_points':skipped_nonmultipass,
  'interpretation':(
   'Close the module-188 same-lineage productive passes by N semicircular returns and audit the exact curvature-square inventory together with the tubular circulation-collar floor already derived in the closure microscope. Two adversarial limits are tested: near hairpins of radius chi a and remote returns of radius eta R. '
   'For near hairpins, total bend length scales as epsilon^(3/5), the curvature-viscous tax integrated over one maintenance time also scales as epsilon^(3/5), while the length-averaged curvature diffusion exposure is exactly 1/(chi^2 Cw Re_Gamma), independent of epsilon. Thus a fixed high-Re lineage can make the tight-return branch persist on each shrinking maintenance time even though total curvature-square diverges. '

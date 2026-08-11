@@ -22,6 +22,8 @@ Saturated passage packing gives
 
 `a=R/sqrt(N)=sqrt(Cw Re_Gamma/mu) epsilon`.
 
+The closure microscope is only defined on the actual multi-pass branch `N>1`.  **AUTOPSY of Frontier run 31477455263:** the first version sampled coarse parameter points with `N<1` but still demanded `N` remote returns and a fixed-aspect tubular collar.  For one such point `N≈0.3`, the declared collar had `b>R_c`, so 160/256/512 all failed the same geometry-validity assertion.  This was a domain-of-model false red, not a precision instability and not evidence for a closure obstruction.  The corrected experiment skips non-multipass points rather than loosening any inequality.
+
 Connect the `N` productive passes by `N` semicircular return bends of radius `R_c`.
 For such bends,
 
