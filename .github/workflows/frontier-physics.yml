@@ -138,6 +138,7 @@ on:
       - 'experiments/143_three_channel_eigenframe_feedback_certificate.py'
       - 'experiments/144_radial_screened_feedback_routing.py'
       - 'experiments/145_screened_feedback_viscous_endpoint_law.py'
+      - 'experiments/146_maximally_delayed_viscous_feedback_profiles.py'
       - 'theory/11_impulse_packing_energy_ladder.md'
       - 'theory/12_smooth_packing_viscous_clock.md'
       - 'theory/13_remote_strain_energy_composition.md'
@@ -200,6 +201,7 @@ on:
       - 'theory/70_D2_fixed_hodge_response.md'
       - 'theory/71_radial_screened_feedback_routing.md'
       - 'theory/72_screened_feedback_viscous_endpoint_law.md'
+      - 'theory/73_delayed_viscous_feedback_visibility.md'
       - 'theory/10_compactness_cancellation_tax.md'
       - '.github/workflows/frontier-physics.yml'
   workflow_dispatch:
@@ -1150,6 +1152,13 @@ jobs:
         run: |
           set -euo pipefail
           python experiments/145_screened_feedback_viscous_endpoint_law.py | tee result-145-${{ matrix.bits }}.json
+      - name: Run maximally delayed viscous feedback profiles
+        shell: bash
+        env:
+          ARB_PREC_BITS: ${{ matrix.bits }}
+        run: |
+          set -euo pipefail
+          python experiments/146_maximally_delayed_viscous_feedback_profiles.py | tee result-146-${{ matrix.bits }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -1288,4 +1297,5 @@ jobs:
             result-143-${{ matrix.bits }}.json
             result-144-${{ matrix.bits }}.json
             result-145-${{ matrix.bits }}.json
+            result-146-${{ matrix.bits }}.json
           if-no-files-found: warn
